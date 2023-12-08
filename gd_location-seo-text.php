@@ -15,7 +15,10 @@ function gd_location_seo_text_func($atts)
 
      //return if not enough data
      if ($num_of_gd_places <= 2) {
-          echo (get_post_meta($gd_location_id, 'description', true));
+          global $basic_text;
+          $output = $basic_text;
+          $output = str_replace("[location]", $archive_title_trimmed, $output);
+          echo $output;
           return;
      }
 
