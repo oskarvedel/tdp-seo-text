@@ -33,7 +33,7 @@ function gd_location_seo_text_func($atts)
      global $statistics_data_fields_texts;
 
      //add content to output
-     $output .= $first_paragraph;
+     $output .= get_seo_paragraph($archive_title_trimmed, $first_paragraph);
      $output .= '<hr class="line">';
      $output .= generate_price_table();
      $output .= '<hr class="line">';
@@ -60,6 +60,10 @@ function gd_location_seo_text_func($atts)
                $output = str_replace("[$field]", "Ukendt", $output);
           }
      }
+     // $output .= '<hr class="line">';
+     // $output .= seeded_rand(1, 5, $archive_title_trimmed);
+     // $output .= '<hr class="line">';
+     // $output .= seeded_rand(1, 3, $archive_title_trimmed);
 
      echo $output;
 }
@@ -78,9 +82,6 @@ function generate_selfstorage_provider_list($gd_place_names)
           return $return_text;
      }
 }
-
-$first_paragraph = '<h2>Hvad koster et depotrum i [location]?</h2>
-     <p class="three-columns">Du kan opbevare ejendele i et depotrum i [location] for i gennemsnit [average price] kr pr. måned. Her på tjekdepot kan du finde ledige depotrum med et bredt udvalg af egenskaber og fordele, herunder klimakontrol, personlig betjening, døgnalarm, videoovervågning, direkte adgang med bil med flere. For at reservere et opbevaringsrum i [location] kan du her på siden nemt få et overblik over ledige depotrum og vælge et rum med den rette størrelse og de nødvendige egenskaber. Afhængigt af dine behov kan du nemt finde det rigtige depotrum i [location]. Vi har et væld af muligheder for dig at vælge imellem. Du kan vælge et mindre lagerrum og derefter se, hvor meget du har brug for at opbevare, eller du kan vælge et større depotrum for at få al den plads, du har brug for til alle slags ejendele, selv motorcykler og biler. I [location] starter priserne for et depotrum ved [lowest price] kr og går op til [highest price] kr, afhængigt af rummets størrelse og egenskaber.</p>';
 
 $second_paragraph = '<h2>Find opbevaring i [location]</h2>
      <p class="three-columns">Hvis du leder efter opbevaring i [location], er du kommet til det rette sted. Her på tjekdepot har vi registreret [num of gd_places] udbydere af opbevaring placeret i [location], og de tilbyder alle sikre og tilgængelige depotrum. Du kan sortere alle depotrum i dit område efter pris, størrelse og egenskaber. Her kan du også finde mere information om de forskellige egenskaber ved et depotrum såsom klimakontrol, adgangsforhold og sikkerhedsforanstaltninger. Se vores opslag i [location], vælg et depotrum, der passer til dine behov, og lej den med det samme. Når du reserverer opbevaring, har du et rigtig godt sted at placere dine ting, både på lang og kort sigt. Langt de fleste opbevaringsrum udlejes på månedsbasis, hvilket betyder, at du har mulighed for at flytte ind og ud når som helst. Du kan leje opbevaring i [location] i en måned eller et helt år - uanset hvad, kan du forlænge din lejeperiode og skifte til et depotrum på en anden størrelse, når du ønsker det. På denne måde er det nemt at vælge den bedste opbevaring til dine ejendele!</p>';
@@ -205,3 +206,26 @@ $statistics_data_fields_texts = array(
      'large size average price' => 'Et stort depotrum (mellem 18 og 25 m²) koster i gennemsnit: <strong>[large size average price] kr. </strong>',
      'very large size average price' => 'Et meget stort depotrum (over 25 m²) koster i gennemsnit: <strong>[very large size average price] kr. </strong>',
 );
+
+function get_seo_paragraph($location_title, $paragraph_array)
+{
+     // print_r($first_paragraph);
+     $num_of_options = count($paragraph_array);
+     //echo "num of options: ", $num_of_options;
+     $chosen_option = seeded_rand(0, $num_of_options, $location_title);
+     //echo $chosen_option;
+     //return $paragraph_array[2];
+     return $paragraph_array[$chosen_option - 1];
+}
+
+function seeded_rand($min, $max, $seed)
+{
+     // Convert the seed to an integer using the crc32 function
+     $seed = crc32($seed);
+
+     // Seed the random number generator
+     mt_srand($seed);
+
+     // Generate and return a random number
+     return mt_rand($min, $max);
+}
