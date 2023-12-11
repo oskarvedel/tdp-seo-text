@@ -3,24 +3,15 @@
 function gd_location_seo_text_func($atts)
 {
      //get data
-     $gd_location_id = extract_geolocation_id_via_url_seo_text();
+     $geolocation_id = extract_geolocation_id_via_url_seo_text();
 
-     $num_of_gd_places = get_post_meta($gd_location_id, 'num of gd_places', true);
+     $num_of_gd_places = get_post_meta($geolocation_id, 'num of gd_places', true);
 
      $archive_title_trimmed = substr(get_the_archive_title(), 2);
 
-     $gd_place_names = get_post_meta($gd_location_id, 'gd_place_names', true);
-     $schools = get_post_meta($gd_location_id, 'schools', true);
-     $sublocations = get_post_meta($gd_location_id, 'sublocations', false);
-
-     //return if not enough data
-     if ($num_of_gd_places <= 2) {
-          global $basic_text;
-          $output = $basic_text;
-          $output = str_replace("[location]", $archive_title_trimmed, $output);
-          echo $output;
-          return;
-     }
+     $gd_place_names = get_post_meta($geolocation_id, 'gd_place_names', true);
+     $schools = get_post_meta($geolocation_id, 'schools', true);
+     $sublocations = get_post_meta($geolocation_id, 'sublocations', false);
 
      //set variables
      global $statistics_data_fields;
@@ -31,6 +22,16 @@ function gd_location_seo_text_func($atts)
      global $third_paragraph;
      $output = "";
      global $statistics_data_fields_texts;
+
+     set_meta_title($geolocation_id, $num_of_gd_places, $archive_title_trimmed, $statistics_data_fields);
+
+     if ($num_of_gd_places <= 2) {
+          global $basic_text;
+          $output = $basic_text;
+          $output = str_replace("[location]", $archive_title_trimmed, $output);
+          echo $output;
+          return;
+     }
 
      //add content to output
      $output .= get_seo_paragraph($archive_title_trimmed, $first_paragraph);
@@ -46,29 +47,49 @@ function gd_location_seo_text_func($atts)
      $output .= generate_selfstorage_provider_list($gd_place_names);
 
      //relace variable placeholders with data
-     $output = str_replace("[num of gd_places]", $num_of_gd_places, $output);
-
-     $output = str_replace("[location]", $archive_title_trimmed, $output);
-
-     foreach ($statistics_data_fields as $field) {
-          $value = get_post_meta($gd_location_id, $field, true);
-          if (!empty($value)) {
-               $rounded = floatval(round($value, 2));
-               $numberformat = number_format($value, 0, ',', '.');
-               $output = str_replace("[$field]", $numberformat, $output);
-          } else {
-               $output = str_replace("[$field]", "Ukendt", $output);
-          }
-     }
-     // $output .= '<hr class="line">';
-     // $output .= seeded_rand(1, 5, $archive_title_trimmed);
-     // $output .= '<hr class="line">';
-     // $output .= seeded_rand(1, 3, $archive_title_trimmed);
+     $output = replace_variable_placeholders($output, $statistics_data_fields, $geolocation_id, $num_of_gd_places, $archive_title_trimmed);
 
      echo $output;
 }
 
 add_shortcode('gd_location_seo_text_shortcode', 'gd_location_seo_text_func');
+
+function set_meta_title($geolocation_id, $num_of_gd_places, $archive_title_trimmed, $statistics_data_fields)
+{
+     if ($num_of_gd_places == 0) {
+          $meta_title = "Opbevaringsrum nær " . $archive_title_trimmed .  "";
+     }
+     $meta_title = "[num of gd_places] udbydere af depotrum i [location] (Fra [lowest price],-)";
+     $meta_title = replace_variable_placeholders($meta_title, $statistics_data_fields, $geolocation_id, $num_of_gd_places, $archive_title_trimmed);
+     update_post_meta($geolocation_id, 'meta_title', $meta_title);
+     trigger_error("meta title set", E_USER_NOTICE);
+}
+
+function replace_variable_placeholders($input_text, $statistics_data_fields, $geolocation_id, $num_of_gd_places, $archive_title_trimmed)
+{
+     $input_text = str_replace("[num of gd_places]", $num_of_gd_places, $input_text);
+
+     $input_text = str_replace("[location]", $archive_title_trimmed, $input_text);
+
+     $input_text = replace_statistics_data_fields_with_values($input_text, $statistics_data_fields, $geolocation_id);
+
+     return $input_text;
+}
+
+function replace_statistics_data_fields_with_values($input_text, $statistics_data_fields, $geolocation_id)
+{
+     foreach ($statistics_data_fields as $field) {
+          $value = get_post_meta($geolocation_id, $field, true);
+          if (!empty($value)) {
+               $rounded = floatval(round($value, 2));
+               $numberformat = number_format($value, 0, ',', '.');
+               $input_text = str_replace("[$field]", $numberformat, $input_text);
+          } else {
+               $input_text = str_replace("[$field]", "Ukendt", $input_text);
+          }
+     }
+     return $input_text;
+}
 
 function generate_selfstorage_provider_list($gd_place_names)
 {
