@@ -24,5 +24,5 @@ function wp_meta_title()
         }
     }
 }
-// add_filter('pre_get_document_title', 'wp_meta_title', 21);
-// add_filter('wp_title', 'wp_meta_title', 21);
+add_filter('pre_get_document_title', 'wp_meta_title', 21);
+add_filter('wp_title', 'wp_meta_title', 21);
