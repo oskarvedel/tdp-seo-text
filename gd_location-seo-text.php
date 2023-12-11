@@ -57,7 +57,7 @@ add_shortcode('gd_location_seo_text_shortcode', 'gd_location_seo_text_func');
 function set_meta_title($geolocation_id, $num_of_gd_places, $archive_title_trimmed, $statistics_data_fields, $meta_title_candidates)
 {
      if ($num_of_gd_places == 0) {
-          $meta_title = "Opbevaringsrum nær " . $archive_title_trimmed .  "";
+          $meta_title = "Opbevaring " . $archive_title_trimmed . " – Find depotrum nær" . $archive_title_trimmed;
      }
 
      $num_of_options = count($meta_title_candidates);
