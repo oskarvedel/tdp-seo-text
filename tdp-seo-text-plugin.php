@@ -12,6 +12,7 @@ require_once dirname(__FILE__) . '/gd_location-metadata-shortcode.php';
 
 require_once dirname(__FILE__) . '/texts/basic-text.php';
 require_once dirname(__FILE__) . '/texts/first-paragraph.php';
+require_once dirname(__FILE__) . '/texts/meta-title.php';
 
 function wp_meta_title()
 {
@@ -23,5 +24,5 @@ function wp_meta_title()
         }
     }
 }
-add_filter('pre_get_document_title', 'wp_meta_title', 21);
-add_filter('wp_title', 'wp_meta_title', 21);
+// add_filter('pre_get_document_title', 'wp_meta_title', 21);
+// add_filter('wp_title', 'wp_meta_title', 21);

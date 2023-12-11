@@ -15,15 +15,15 @@ function gd_location_seo_text_func($atts)
 
      //set variables
      global $statistics_data_fields;
-     global $text_template;
-     global $first_paragraph;
+     global $meta_title_candidates;
+     global $first_paragraph_candidates;
      global $second_paragraph;
      global $price_table;
      global $third_paragraph;
      $output = "";
      global $statistics_data_fields_texts;
 
-     set_meta_title($geolocation_id, $num_of_gd_places, $archive_title_trimmed, $statistics_data_fields);
+     set_meta_title($geolocation_id, $num_of_gd_places, $archive_title_trimmed, $statistics_data_fields, $meta_title_candidates);
 
      if ($num_of_gd_places <= 2) {
           global $basic_text;
@@ -34,7 +34,7 @@ function gd_location_seo_text_func($atts)
      }
 
      //add content to output
-     $output .= get_seo_paragraph($archive_title_trimmed, $first_paragraph);
+     $output .= get_seo_paragraph($archive_title_trimmed, $first_paragraph_candidates);
      $output .= '<hr class="line">';
      $output .= generate_price_table();
      $output .= '<hr class="line">';
@@ -54,15 +54,19 @@ function gd_location_seo_text_func($atts)
 
 add_shortcode('gd_location_seo_text_shortcode', 'gd_location_seo_text_func');
 
-function set_meta_title($geolocation_id, $num_of_gd_places, $archive_title_trimmed, $statistics_data_fields)
+function set_meta_title($geolocation_id, $num_of_gd_places, $archive_title_trimmed, $statistics_data_fields, $meta_title_candidates)
 {
      if ($num_of_gd_places == 0) {
           $meta_title = "Opbevaringsrum nær " . $archive_title_trimmed .  "";
      }
-     $meta_title = "[num of gd_places] udbydere af depotrum i [location] (Fra [lowest price],-)";
+
+     $num_of_options = count($meta_title_candidates);
+     $chosen_option = seeded_rand(0, $num_of_options, $archive_title_trimmed);
+     $meta_title = $meta_title_candidates[$chosen_option - 1];
+
      $meta_title = replace_variable_placeholders($meta_title, $statistics_data_fields, $geolocation_id, $num_of_gd_places, $archive_title_trimmed);
      update_post_meta($geolocation_id, 'meta_title', $meta_title);
-     trigger_error("meta title set", E_USER_NOTICE);
+     trigger_error("meta title set: " . $meta_title, E_USER_NOTICE);
 }
 
 function replace_variable_placeholders($input_text, $statistics_data_fields, $geolocation_id, $num_of_gd_places, $archive_title_trimmed)

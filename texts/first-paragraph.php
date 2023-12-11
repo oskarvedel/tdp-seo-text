@@ -1,12 +1,7 @@
 <?php
 
-function get_first_paragraph_seo_text($location_slug)
-{
-    global $first_paragraph;
-    $first_paragraph = str_replace('[location]', $location_slug, $first_paragraph);
-    return $first_paragraph;
-}
-$first_paragraph = array(
+
+$first_paragraph_candidates = array(
     '<h2>Hvad koster et depotrum i [location]?</h2>
     <p class="three-columns">Du kan opbevare ejendele i et depotrum i [location] for i gennemsnit [average price] kr pr. måned. Her på tjekdepot kan du finde ledige depotrum med et bredt udvalg af egenskaber og fordele, herunder klimakontrol, personlig betjening, døgnalarm, videoovervågning, direkte adgang med bil med flere. For at reservere et opbevaringsrum i [location] kan du her på siden nemt få et overblik over ledige depotrum og vælge et rum med den rette størrelse og de nødvendige egenskaber. Afhængigt af dine behov kan du nemt finde det rigtige depotrum i [location]. Vi har et væld af muligheder for dig at vælge imellem. Du kan vælge et mindre lagerrum og derefter se, hvor meget du har brug for at opbevare, eller du kan vælge et større depotrum for at få al den plads, du har brug for til alle slags ejendele, selv motorcykler og biler. I [location] starter priserne for et depotrum ved [lowest price] kr og går op til [highest price] kr, afhængigt af rummets størrelse og egenskaber.</p>',
 
@@ -22,5 +17,5 @@ $candidates = array(
 <p class="three-columns"></p>',
 
     '<h2>Priser på depotrum i [location]-området</h2>
-<p class="three-columns"></p>'
+<p class="three-columns"></p>',
 );
