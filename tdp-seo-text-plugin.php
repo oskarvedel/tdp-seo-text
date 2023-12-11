@@ -21,6 +21,8 @@ function wp_meta_title()
         $meta_title = get_post_meta($geolocation_id, 'meta_title', true);
         if (!empty($meta_title)) {
             return $meta_title;
+        } else {
+            return "Find opbevaring og depotrum";
         }
     }
 }
