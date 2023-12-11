@@ -5,7 +5,7 @@ function gd_location_seo_text_func($atts)
      //get data
      $geolocation_id = extract_geolocation_id_via_url_seo_text();
 
-     $num_of_gd_places = get_post_meta($geolocation_id, 'num of gd_places', true);
+     $num_of_gd_places = intval(get_post_meta($geolocation_id, 'num of gd_places', true));
 
      $archive_title_trimmed = substr(get_the_archive_title(), 2);
 
@@ -56,13 +56,15 @@ add_shortcode('gd_location_seo_text_shortcode', 'gd_location_seo_text_func');
 
 function set_meta_title($geolocation_id, $num_of_gd_places, $archive_title_trimmed, $statistics_data_fields, $meta_title_candidates)
 {
+     $lowest_price = get_post_meta($geolocation_id, 'lowest price', true);
+     $lowest_price_floatval = floatval($lowest_price);
      if ($num_of_gd_places == 0) {
           $meta_title = "Opbevaring " . $archive_title_trimmed . " – Find depotrum nær" . $archive_title_trimmed;
+     } else if ($lowest_price_floatval == 0) {
+          $meta_title = $meta_title_candidates[1];
+     } else {
+          $meta_title = $meta_title_candidates[0];
      }
-
-     $num_of_options = count($meta_title_candidates);
-     $chosen_option = seeded_rand(0, $num_of_options, $archive_title_trimmed);
-     $meta_title = $meta_title_candidates[$chosen_option - 1];
 
      $meta_title = replace_variable_placeholders($meta_title, $statistics_data_fields, $geolocation_id, $num_of_gd_places, $archive_title_trimmed);
      update_post_meta($geolocation_id, 'meta_title', $meta_title);
