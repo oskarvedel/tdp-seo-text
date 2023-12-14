@@ -15,7 +15,6 @@ function generate_missing_static_map_images()
         $lat = $geolocation_meta['latitude'][0];
         $lng = $geolocation_meta['longitude'][0];
         $zoom = 10;
-        xdebug_break();
         $width = 400;
         $height = 300;
         $apiKey = "AIzaSyAXa6QObKCBreGTsTTQdLRvT2UagPsGhpU";

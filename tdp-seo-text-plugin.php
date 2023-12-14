@@ -46,3 +46,31 @@ function handle_generate_static_maps()
     exit;
 }
 add_action('admin_post_generate_maps', 'handle_generate_static_maps');
+
+//add a button that runs the generate static map image function on the plugin settings page
+function add_generate_seo_texts_button($links)
+{
+    $consolidate_link = '<a href="' . esc_url(admin_url('admin-post.php?action=generate_seo_texts')) . '">Generate SEO Texts</a>';
+    array_unshift($links, $consolidate_link);
+    return $links;
+}
+add_filter('plugin_action_links_tdp-seo-text/tdp-seo-text-plugin.php', 'add_generate_seo_texts_button');
+
+function handle_generate_seo_texts()
+{
+    generate_seo_texts();
+    wp_redirect(admin_url('plugins.php?s=tdp&plugin_status=all'));
+    exit;
+}
+add_action('admin_post_generate_seo_texts', 'handle_generate_seo_texts');
+
+
+function gd_location_seo_text_func()
+{
+    $id = extract_geolocation_id_via_url_seo_text();
+    xdebug_break();
+    $seo_text = get_post_meta($id, 'seo_text', true);
+    echo $seo_text;
+}
+
+add_shortcode('gd_location_seo_text_shortcode', 'gd_location_seo_text_func');

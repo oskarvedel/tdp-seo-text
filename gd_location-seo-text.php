@@ -1,55 +1,61 @@
 <?php
 
-function gd_location_seo_text_func($atts)
+function generate_seo_texts()
 {
-     //get data
-     $geolocation_id = extract_geolocation_id_via_url_seo_text();
+     xdebug_break();
+     $geolocations = get_posts(array('post_type' => 'geolocations', 'posts_per_page' => -1));
+     $geolocations = get_posts(array('post_type' => 'geolocations', 'p' => 6345));
 
-     $num_of_gd_places = intval(get_post_meta($geolocation_id, 'num of gd_places', true));
+     foreach ($geolocations as $geolocation) {
+          $geolocation_id = $geolocation->ID;
+          $geolocation_meta = get_post_meta($geolocation_id);
+          // $geolocation_meta['geolocation'] = unserialize($geolocation_meta['geolocation'][0]);
 
-     $archive_title_trimmed = substr(get_the_archive_title(), 2);
+          $num_of_gd_places = get_post_meta($geolocation_id, 'num of gd_places', true);
 
-     $gd_place_names = get_post_meta($geolocation_id, 'gd_place_names', true);
-     $schools = get_post_meta($geolocation_id, 'schools', true);
-     $sublocations = get_post_meta($geolocation_id, 'sublocations', false);
+          $archive_title_trimmed = get_the_title($geolocation_id);
 
-     //set variables
-     global $statistics_data_fields;
-     global $meta_title_candidates;
-     global $first_paragraph_candidates;
-     global $second_paragraph;
-     global $price_table;
-     global $third_paragraph;
-     $output = "";
-     global $statistics_data_fields_texts;
+          $gd_place_names = get_post_meta($geolocation_id, 'gd_place_names', true);
+          $schools = get_post_meta($geolocation_id, 'schools', true);
+          $sublocations = get_post_meta($geolocation_id, 'sublocations', false);
 
-     set_meta_title($geolocation_id, $num_of_gd_places, $archive_title_trimmed, $statistics_data_fields, $meta_title_candidates);
+          //set variables
+          global $statistics_data_fields;
+          global $meta_title_candidates;
+          global $first_paragraph_candidates;
+          global $second_paragraph;
+          global $price_table;
+          global $third_paragraph;
+          $output = "";
+          global $statistics_data_fields_texts;
 
-     if ($num_of_gd_places <= 2) {
-          global $basic_text;
-          $output = $basic_text;
-          $output = str_replace("[location]", $archive_title_trimmed, $output);
-          echo $output;
-          return;
+          set_meta_title($geolocation_id, $num_of_gd_places, $archive_title_trimmed, $statistics_data_fields, $meta_title_candidates);
+
+          if ($num_of_gd_places <= 2) {
+               global $basic_text;
+               $output = $basic_text;
+               $output = str_replace("[location]", $archive_title_trimmed, $output);
+               update_post_meta($geolocation_id, 'seo_text', $output);
+               return;
+          }
+
+          //add content to output
+          $output .= get_seo_paragraph($archive_title_trimmed, $first_paragraph_candidates);
+          $output .= '<hr class="line">';
+          $output .= generate_price_table();
+          $output .= '<hr class="line">';
+          $output .= $second_paragraph;
+          $output .= '<hr class="line">';
+          $output .= $third_paragraph;
+          $output .= '<hr class="line">';
+          $output .= generate_schools_paragraph($schools);
+          $output .= generate_neighbourhoods_paragraph($sublocations);
+          $output .= generate_selfstorage_provider_list($gd_place_names);
+
+          //relace variable placeholders with data
+          $output = replace_variable_placeholders($output, $statistics_data_fields, $geolocation_id, $num_of_gd_places, $archive_title_trimmed);
+          update_post_meta($geolocation_id, 'seo_text', $output);
      }
-
-     //add content to output
-     $output .= get_seo_paragraph($archive_title_trimmed, $first_paragraph_candidates);
-     $output .= '<hr class="line">';
-     $output .= generate_price_table();
-     $output .= '<hr class="line">';
-     $output .= $second_paragraph;
-     $output .= '<hr class="line">';
-     $output .= $third_paragraph;
-     $output .= '<hr class="line">';
-     $output .= generate_schools_paragraph($schools);
-     $output .= generate_neighbourhoods_paragraph($sublocations);
-     $output .= generate_selfstorage_provider_list($gd_place_names);
-
-     //relace variable placeholders with data
-     $output = replace_variable_placeholders($output, $statistics_data_fields, $geolocation_id, $num_of_gd_places, $archive_title_trimmed);
-
-     echo $output;
 }
 
 add_shortcode('gd_location_seo_text_shortcode', 'gd_location_seo_text_func');
