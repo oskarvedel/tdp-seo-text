@@ -68,7 +68,6 @@ add_action('admin_post_generate_seo_texts', 'handle_generate_seo_texts');
 function gd_location_seo_text_func()
 {
     $id = extract_geolocation_id_via_url_seo_text();
-    xdebug_break();
     $seo_text = get_post_meta($id, 'seo_text', true);
     echo $seo_text;
 }

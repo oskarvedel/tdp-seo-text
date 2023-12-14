@@ -56,8 +56,6 @@ function generate_seo_texts()
      }
 }
 
-add_shortcode('gd_location_seo_text_shortcode', 'gd_location_seo_text_func');
-
 function set_meta_title($geolocation_id, $num_of_gd_places, $archive_title_trimmed, $statistics_data_fields, $meta_title_candidates)
 {
      $lowest_price = get_post_meta($geolocation_id, 'lowest price', true);
