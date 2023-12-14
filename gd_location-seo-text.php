@@ -91,7 +91,7 @@ function replace_image_variables($input_text, $geolocation_id, $archive_title_tr
 {
      //insert static map
      $static_map = get_post_meta($geolocation_id, 'static_map', true);
-     $input_text = str_replace("[map img]", '<img src="' . $static_map . '" alt="map of ' . $archive_title_trimmed . ' kort">', $input_text);
+     $input_text = str_replace("[map img]", '<img src="' . $static_map . '" alt="Kort over' . $archive_title_trimmed . '">', $input_text);
      return $input_text;
 }
 function replace_statistics_data_fields_with_values($input_text, $statistics_data_fields, $geolocation_id)
