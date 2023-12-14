@@ -44,6 +44,6 @@ function generate_static_map_image($lat, $lng, $zoom, $width = 400, $height = 30
     $url .= "&zoom=$zoom";
     $url .= "&size=" . $width . "x" . $height;
     $url .= "&key=$apiKey";
-
+    $url .= "&language=da";
     return $url;
 }
