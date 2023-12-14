@@ -4,7 +4,6 @@ function generate_seo_texts()
 {
      xdebug_break();
      $geolocations = get_posts(array('post_type' => 'geolocations', 'posts_per_page' => -1));
-     $geolocations = get_posts(array('post_type' => 'geolocations', 'p' => 6345));
 
      foreach ($geolocations as $geolocation) {
           $geolocation_id = $geolocation->ID;
@@ -64,7 +63,7 @@ function set_meta_title($geolocation_id, $num_of_gd_places, $archive_title_trimm
 {
      $lowest_price = get_post_meta($geolocation_id, 'lowest price', true);
      $lowest_price_floatval = floatval($lowest_price);
-     if ($num_of_gd_places == 0) {
+     if ($num_of_gd_places <= 4) {
           $meta_title = "Opbevaring " . $archive_title_trimmed . " – Find depotrum nær " . $archive_title_trimmed;
      } else if ($lowest_price_floatval == 0) {
           $meta_title = $meta_title_candidates[1];
