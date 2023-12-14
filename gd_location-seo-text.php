@@ -60,7 +60,7 @@ function set_meta_title($geolocation_id, $num_of_gd_places, $archive_title_trimm
 {
      $lowest_price = get_post_meta($geolocation_id, 'lowest price', true);
      $lowest_price_floatval = floatval($lowest_price);
-     if ($num_of_gd_places <= 4) {
+     if ($num_of_gd_places <= 3) {
           $meta_title = "Opbevaring " . $archive_title_trimmed . " – Find depotrum nær " . $archive_title_trimmed;
      } else if ($lowest_price_floatval == 0) {
           $meta_title = $meta_title_candidates[1];
