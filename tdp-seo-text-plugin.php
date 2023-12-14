@@ -13,6 +13,7 @@ require_once dirname(__FILE__) . '/gd_location-metadata-shortcode.php';
 require_once dirname(__FILE__) . '/texts/basic-text.php';
 require_once dirname(__FILE__) . '/texts/first-paragraph.php';
 require_once dirname(__FILE__) . '/texts/meta-title.php';
+require_once dirname(__FILE__) . '/static-map-image.php';
 
 function wp_meta_title()
 {
@@ -28,3 +29,20 @@ function wp_meta_title()
 }
 add_filter('pre_get_document_title', 'wp_meta_title', 21);
 add_filter('wp_title', 'wp_meta_title', 21);
+
+//add a button that runs the generate static map image function on the plugin settings page
+function add_generate_maps_button($links)
+{
+    $consolidate_link = '<a href="' . esc_url(admin_url('admin-post.php?action=generate_maps')) . '">Generate Missing Static Maps</a>';
+    array_unshift($links, $consolidate_link);
+    return $links;
+}
+add_filter('plugin_action_links_tdp-seo-text/tdp-seo-text-plugin.php', 'add_generate_maps_button');
+
+function handle_generate_static_maps()
+{
+    generate_missing_static_map_images();
+    wp_redirect(admin_url('plugins.php?s=tdp&plugin_status=all'));
+    exit;
+}
+add_action('admin_post_generate_maps', 'handle_generate_static_maps');
