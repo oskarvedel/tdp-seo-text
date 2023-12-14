@@ -1,7 +1,7 @@
 <?php
 
 /**
- * Plugin Name: tdp-seo-text-plugin
+ * Plugin Name: tdp-seo-text
  * Version: 1.0
  */
 
