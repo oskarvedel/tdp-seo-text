@@ -34,7 +34,7 @@ function generate_seo_texts()
                $output = $basic_text;
                $output = str_replace("[location]", $archive_title_trimmed, $output);
                update_post_meta($geolocation_id, 'seo_text', $output);
-               return;
+               continue;
           }
 
           //add content to output
