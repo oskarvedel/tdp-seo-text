@@ -58,19 +58,23 @@ function generate_seo_texts()
 
 function set_meta_title($geolocation_id, $num_of_gd_places, $archive_title_trimmed, $statistics_data_fields, $meta_title_candidates)
 {
+     $current_meta_title = get_post_meta($geolocation_id, 'meta_title', true);
      $lowest_price = get_post_meta($geolocation_id, 'lowest price', true);
      $lowest_price_floatval = floatval($lowest_price);
      if ($num_of_gd_places < 3) {
-          $meta_title = "Opbevaring " . $archive_title_trimmed . " – Find depotrum nær " . $archive_title_trimmed;
+          $new_meta_title = "Opbevaring " . $archive_title_trimmed . " – Find depotrum nær " . $archive_title_trimmed;
      } else if ($lowest_price_floatval == 0) {
-          $meta_title = $meta_title_candidates[1];
+          $new_meta_title = $meta_title_candidates[1];
      } else {
-          $meta_title = $meta_title_candidates[0];
+          $new_meta_title = $meta_title_candidates[0];
      }
 
-     $meta_title = replace_variable_placeholders($meta_title, $statistics_data_fields, $geolocation_id, $num_of_gd_places, $archive_title_trimmed);
-     update_post_meta($geolocation_id, 'meta_title', $meta_title);
-     trigger_error("meta title set: " . $meta_title, E_USER_NOTICE);
+     $new_meta_title = replace_variable_placeholders($new_meta_title, $statistics_data_fields, $geolocation_id, $num_of_gd_places, $archive_title_trimmed);
+
+     if ($current_meta_title != $new_meta_title) {
+          update_post_meta($geolocation_id, 'meta_title', $new_meta_title);
+          trigger_error("Meta title updated for " . $archive_title_trimmed . ". New meta title:  " . $new_meta_title, E_USER_NOTICE);
+     }
 }
 
 function replace_variable_placeholders($input_text, $statistics_data_fields, $geolocation_id, $num_of_gd_places, $archive_title_trimmed)
@@ -91,7 +95,7 @@ function replace_image_variables($input_text, $geolocation_id, $archive_title_tr
 {
      //insert static map
      $static_map = get_post_meta($geolocation_id, 'static_map', true);
-     $input_text = str_replace("[map img]", '<img src="' . $static_map . '" alt="Kort over' . $archive_title_trimmed . '">', $input_text);
+     $input_text = str_replace("[map img]", '<img src="' . $static_map . '" alt="Kort over ' . $archive_title_trimmed . '">', $input_text);
      return $input_text;
 }
 function replace_statistics_data_fields_with_values($input_text, $statistics_data_fields, $geolocation_id)
@@ -248,10 +252,9 @@ $statistics_data_fields_texts = array(
 
 function get_seo_paragraph($location_title, $paragraph_array)
 {
-     // print_r($first_paragraph);
      $num_of_options = count($paragraph_array);
      //echo "num of options: ", $num_of_options;
-     $chosen_option = seeded_rand(0, $num_of_options, $location_title);
+     $chosen_option = seeded_rand(1, $num_of_options, $location_title);
      //echo $chosen_option;
      //return $paragraph_array[2];
      return $paragraph_array[$chosen_option - 1];
