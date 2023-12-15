@@ -17,7 +17,7 @@ function generate_missing_static_map_images()
         $zoom = 10;
         $width = 400;
         $height = 300;
-        $apiKey = "AIzaSyAXa6QObKCBreGTsTTQdLRvT2UagPsGhpU";
+        $apiKey = "AIzaSyADtbZgDf613Y0Jxgql88I5LPqe1N3HnVA";
         $url = generate_static_map_image($lat, $lng, $zoom, $width, $height, $apiKey);
         $image = file_get_contents($url);
         $upload_dir = wp_upload_dir();
