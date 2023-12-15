@@ -11,7 +11,6 @@ function generate_missing_static_map_images()
             continue;
         }
         $geolocation_meta = get_post_meta($geolocation_id);
-        $geolocation_meta['geolocation'] = unserialize($geolocation_meta['geolocation'][0]);
         $lat = $geolocation_meta['latitude'][0];
         $lng = $geolocation_meta['longitude'][0];
         $zoom = 10;
@@ -25,16 +24,17 @@ function generate_missing_static_map_images()
         $upload_url = $upload_dir['url'];
         $filename = $geolocation_id . ".png";
         $file = $upload_path . "/" . $filename;
-        $file = $upload_path . "/" . $filename;
+        $file_url = $upload_url . "/" . $filename;
         if (file_exists($file)) {
             unlink($file);
             trigger_error("deleted old static map image for geolocation " . $geolocation_id . " at " . $file_url, E_USER_NOTICE);
         }
         file_put_contents($file, $image);
-        $file_url = $upload_url . "/" . $filename;
+
         update_post_meta($geolocation_id, 'static_map', $file_url);
         trigger_error("Generated static map for geolocation " . $geolocation_id . " at " . $file_url, E_USER_NOTICE);
     }
+    trigger_error("Generated static maps for all geolocations", E_USER_NOTICE);
 }
 
 function generate_static_map_image($lat, $lng, $zoom, $width = 400, $height = 300, $apiKey)

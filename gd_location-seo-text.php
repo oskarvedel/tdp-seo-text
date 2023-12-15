@@ -10,6 +10,8 @@ function generate_seo_texts()
           // $geolocation_meta['geolocation'] = unserialize($geolocation_meta['geolocation'][0]);
 
           $num_of_gd_places = get_post_meta($geolocation_id, 'num of gd_places', true);
+          $num_of_gd_places_within_5k = get_post_meta($geolocation_id, 'num_of_gd_places_within_5_km', true);
+          $num_of_gd_places = intval($num_of_gd_places) + intval($num_of_gd_places_within_5k);
 
           $archive_title_trimmed = get_the_title($geolocation_id);
 
@@ -52,8 +54,14 @@ function generate_seo_texts()
 
           //relace variable placeholders with data
           $output = replace_variable_placeholders($output, $statistics_data_fields, $geolocation_id, $num_of_gd_places, $archive_title_trimmed);
-          update_post_meta($geolocation_id, 'seo_text', $output);
+          $old_set_text = get_post_meta($geolocation_id, 'seo_text', true);
+
+          if ($old_set_text != $output) {
+               update_post_meta($geolocation_id, 'seo_text', $output);
+               trigger_error("SEO text updated for " . $archive_title_trimmed, E_USER_NOTICE);
+          }
      }
+     trigger_error("SEO texts generated and meta titles updated", E_USER_NOTICE);
 }
 
 function set_meta_title($geolocation_id, $num_of_gd_places, $archive_title_trimmed, $statistics_data_fields, $meta_title_candidates)

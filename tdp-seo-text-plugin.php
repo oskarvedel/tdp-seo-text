@@ -33,7 +33,7 @@ add_filter('wp_title', 'wp_meta_title', 21);
 //add a button that runs the generate static map image function on the plugin settings page
 function add_generate_maps_button($links)
 {
-    $consolidate_link = '<a href="' . esc_url(admin_url('admin-post.php?action=generate_maps')) . '">Generate Missing Static Maps</a>';
+    $consolidate_link = '<a href="' . esc_url(admin_url('admin-post.php?action=generate_maps')) . '">Generate missing static maps</a>';
     array_unshift($links, $consolidate_link);
     return $links;
 }
@@ -50,7 +50,7 @@ add_action('admin_post_generate_maps', 'handle_generate_static_maps');
 //add a button that runs the generate static map image function on the plugin settings page
 function add_generate_seo_texts_button($links)
 {
-    $consolidate_link = '<a href="' . esc_url(admin_url('admin-post.php?action=generate_seo_texts')) . '">Generate SEO Texts</a>';
+    $consolidate_link = '<a href="' . esc_url(admin_url('admin-post.php?action=generate_seo_texts')) . '">Generate SEO texts</a>';
     array_unshift($links, $consolidate_link);
     return $links;
 }
