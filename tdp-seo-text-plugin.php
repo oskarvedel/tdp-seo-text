@@ -2,7 +2,7 @@
 
 /**
  * Plugin Name: tdp-seo-text
- * Version: 1.0
+ * Version: 1.1
  */
 
 require_once dirname(__FILE__) . '/tdp-common-seo-text.php';
