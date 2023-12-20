@@ -76,7 +76,6 @@ add_shortcode('gd_location_seo_text_shortcode', 'gd_location_seo_text_func');
 
 
 add_action('elementor/query/gd_places_for_geolocation', function ($query) {
-    xdebug_break();
     $geolocation_id = extract_geolocation_id_via_url_seo_text();
     $gd_place_list_combined = get_post_meta($geolocation_id, 'gd_place_list_combined', true);
 

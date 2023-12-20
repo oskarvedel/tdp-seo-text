@@ -43,7 +43,7 @@ function generate_seo_texts()
           //add content to output
           $output .= get_seo_paragraph($archive_title_trimmed, $first_paragraph_candidates);
           $output .= '<hr class="line">';
-          $output .= generate_price_table();
+          $output .= generate_price_table($geolocation_id);
           $output .= '<hr class="line">';
           $output .= $second_paragraph;
           $output .= '<hr class="line">';
@@ -191,9 +191,49 @@ function generate_selfstorage_provider_list($gd_place_list_combined)
 $second_paragraph = '<h2>Find opbevaring i [location]</h2>
      <p class="three-columns">Hvis du leder efter opbevaring i [location], er du kommet til det rette sted. Her på tjekdepot har vi registreret [num_of_gd_places] udbydere af opbevaring placeret i [location], og de tilbyder alle sikre og tilgængelige depotrum. Du kan sortere alle depotrum i dit område efter pris, størrelse og egenskaber. Her kan du også finde mere information om de forskellige egenskaber ved et depotrum såsom klimakontrol, adgangsforhold og sikkerhedsforanstaltninger. Se vores opslag i [location], vælg et depotrum, der passer til dine behov, og lej den med det samme. Når du reserverer opbevaring, har du et rigtig godt sted at placere dine ting, både på lang og kort sigt. Langt de fleste opbevaringsrum udlejes på månedsbasis, hvilket betyder, at du har mulighed for at flytte ind og ud når som helst. Du kan leje opbevaring i [location] i en måned eller et helt år - uanset hvad, kan du forlænge din lejeperiode og skifte til et depotrum på en anden størrelse, når du ønsker det. På denne måde er det nemt at vælge den bedste opbevaring til dine ejendele!</p>';
 
-function generate_price_table()
+function generate_price_table($geolocation_id)
 {
-     $price_table = '
+
+     $size_rows = array(
+          'mini' => '
+               <tr>
+               <td>Mini (fra 0 til 2 m²)</td>
+               <td class="right-align">[mini size lowest price]</td>
+               <td class="right-align">[mini size average price]</td>
+               <td class="right-align">[mini size highest price]</td>
+               </tr>',
+          'small' => '
+               <tr>
+               <td>Lille (2 til 7 m²)</td>
+               <td class="right-align">[small size lowest price]</td>
+               <td class="right-align">[small size average price]</td>
+               <td class="right-align">[small size highest price]</td>
+               </tr>',
+          'medium' => '
+               <tr>
+               <td>Mellem (7 til 18 m²)</td>
+               <td class="right-align">[medium size lowest price]</td>
+               <td class="right-align">[medium size average price]</td>
+               <td class="right-align">[medium size highest price]</td>
+               </tr>',
+          'large' => '
+               <tr>
+               <td>Stort (18 til 25 m²)</td>
+               <td class="right-align">[large size lowest price]</td>
+               <td class="right-align">[large size average price]</td>
+               <td class="right-align">[large size highest price]</td>
+               </tr>',
+          'very_large' => '
+               <tr>
+               <td>Meget stort (over 25 m²)</td>
+               <td class="right-align">[very large size lowest price]</td>
+               <td class="right-align">[very large size average price]</td>
+               <td class="right-align">[very large size highest price]</td>
+               </tr>'
+     );
+
+     $price_table .= '
+               <h3>Priser på depotrum i [location]</h3>
                <table>
                <thead>
                <tr>
@@ -203,41 +243,44 @@ function generate_price_table()
                <th class="right-align"><strong>Højeste pris</strong></th>
                </tr>
                </thead>
-               <tbody>
-               <tr>
-               <td>Mini (fra 0 til 2 m²)</td>
-               <td class="right-align">[mini size lowest price]</td>
-               <td class="right-align">[mini size average price]</td>
-               <td class="right-align">[mini size highest price]</td>
-               </tr>
-               <tr>
-               <td>Lille (2 til 7 m²)</td>
-               <td class="right-align">[small size lowest price]</td>
-               <td class="right-align">[small size average price]</td>
-               <td class="right-align">[small size highest price]</td>
-               </tr>
-               <tr>
-               <td>Mellem (7 til 18 m²)</td>
-               <td class="right-align">[medium size lowest price]</td>
-               <td class="right-align">[medium size average price]</td>
-               <td class="right-align">[medium size highest price]</td>
-               </tr>
-               <tr>
-               <td>Stort (18 til 25 m²)</td>
-               <td class="right-align">[large size lowest price]</td>
-               <td class="right-align">[large size average price]</td>
-               <td class="right-align">[large size highest price]</td>
-               </tr>
-               <tr>
-               <td>Meget stort (over 25 m²)</td>
-               <td class="right-align">[very large size lowest price]</td>
-               <td class="right-align">[very large size average price]</td>
-               <td class="right-align">[very large size highest price]</td>
-               </tr>
-               </tbody>
-               </table>';
+               <tbody>';
+
+     $size_rows_to_include = '';
+     foreach ($size_rows as $size => $size_row) {
+          // xdebug_break();
+          if (check_if_price_table_fields_exist($size, $geolocation_id)) {
+               $size_rows_to_include .= $size_row;
+          }
+     }
+
+     if (empty($size_rows_to_include)) {
+          return '';
+     }
+
+     $price_table .= $size_rows_to_include;
+
+     $price_table .=
+          '</tbody>
+          </table>';
 
      return $price_table;
+}
+
+function check_if_price_table_fields_exist($size, $geolocation_id)
+{
+     // xdebug_break();
+     $price_table_fields = array(
+          $size . ' size lowest price',
+          $size . ' size average price',
+          $size . ' size highest price',
+     );
+     foreach ($price_table_fields as $field => $size_field) {
+          $value = get_post_meta($geolocation_id, $size_field, true);
+          if (empty($value)) {
+               return false;
+          }
+     }
+     return true;
 }
 
 $third_paragraph = '<h2>Hvordan finder jeg et sted at opmagasinere mine ting?</h2>
