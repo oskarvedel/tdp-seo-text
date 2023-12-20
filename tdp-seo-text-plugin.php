@@ -73,3 +73,26 @@ function gd_location_seo_text_func()
 }
 
 add_shortcode('gd_location_seo_text_shortcode', 'gd_location_seo_text_func');
+
+
+add_action('elementor/query/gd_places_for_geolocation', function ($query) {
+    xdebug_break();
+    $geolocation_id = extract_geolocation_id_via_url_seo_text();
+    $gd_place_list_combined = get_post_meta($geolocation_id, 'gd_place_list_combined', true);
+
+    //remove all posts with "hide" set to 1 from gd_place_list_combined
+    $gd_place_list_combined = array_filter($gd_place_list_combined, function ($post_id) {
+        return get_post_meta($post_id, 'hide', true) != 1;
+    });
+
+    // Set the post type to 'gd_place'
+    $query->set('post_type', 'gd_place');
+
+    // Only include posts that are in $gd_place_list_combined
+    $query->set('post__in', $gd_place_list_combined);
+
+    // Order by the 'partner' meta key in descending order
+    $query->set('meta_key', 'partner');
+    $query->set('orderby', 'meta_value_num');
+    $query->set('order', 'DESC');
+});
