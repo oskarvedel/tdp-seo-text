@@ -175,7 +175,6 @@ function generate_selfstorage_provider_list($gd_place_list_combined)
                $place_url = get_permalink($gd_place);
                $partner = get_post_meta($gd_place, 'partner', true);
                $hide = get_post_meta($gd_place, 'hide', true);
-               xdebug_break();
                if ($partner) {
                     $return_text .=  '<a href="' . $place_url . '" class="partner_gd_place_link">' . $place_name . '</a><br>';
                } else if ($hide) {
