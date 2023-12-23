@@ -11,14 +11,9 @@ function generate_seo_texts()
 
           $archive_title_trimmed = get_the_title($geolocation_id);
 
-          $gd_place_list_combined = generate_gd_place_list_combined($geolocation_id);
+          $seo_gd_place_list = get_post_meta($geolocation_id, 'seo_gd_place_list', true);
 
-          update_post_meta($geolocation_id, 'gd_place_list_combined', $gd_place_list_combined);
-
-          $num_of_gd_places = count($gd_place_list_combined);
-
-          $schools = get_post_meta($geolocation_id, 'schools', true);
-          $sublocations = get_post_meta($geolocation_id, 'sublocations', false);
+          $num_of_seo_gd_places = count($seo_gd_place_list);
 
           //set variables
           global $statistics_data_fields;
@@ -30,9 +25,9 @@ function generate_seo_texts()
           $output = "";
           global $statistics_data_fields_texts;
 
-          set_meta_title($geolocation_id, $num_of_gd_places, $archive_title_trimmed, $statistics_data_fields, $meta_title_candidates);
+          set_meta_title($geolocation_id, $num_of_seo_gd_places, $archive_title_trimmed, $statistics_data_fields, $meta_title_candidates);
 
-          if ($num_of_gd_places <= 2) {
+          if ($num_of_seo_gd_places <= 2) {
                global $basic_text;
                $output = $basic_text;
                $output = str_replace("[location]", $archive_title_trimmed, $output);
@@ -49,12 +44,12 @@ function generate_seo_texts()
           $output .= '<hr class="line">';
           $output .= $third_paragraph;
           $output .= '<hr class="line">';
-          $output .= generate_schools_paragraph($schools);
-          $output .= generate_neighbourhoods_paragraph($sublocations);
-          $output .= generate_selfstorage_provider_list($gd_place_list_combined);
+          //$output .= generate_schools_paragraph($geolocation_id);
+          //$output .= generate_neighbourhoods_paragraph($geolocation_id);
+          $output .= generate_selfstorage_provider_list($geolocation_id);
 
           //relace variable placeholders with data
-          $output = replace_variable_placeholders($output, $statistics_data_fields, $geolocation_id, $num_of_gd_places, $archive_title_trimmed);
+          $output = replace_variable_placeholders($output, $statistics_data_fields, $geolocation_id, $num_of_seo_gd_places, $archive_title_trimmed);
           $old_set_text = get_post_meta($geolocation_id, 'seo_text', true);
 
           if ($old_set_text != $output) {
@@ -65,54 +60,13 @@ function generate_seo_texts()
      trigger_error("SEO texts generated and meta titles updated", E_USER_NOTICE);
 }
 
-function generate_gd_place_list_combined($geolocation_id)
-{
 
-     $gd_place_list = get_post_meta($geolocation_id, 'gd_place_list', false);
-     $gd_places_ids_within_8km = get_post_meta($geolocation_id, 'gd_places_within_8_km', true);
-     $gd_places_ids_within_8km = array_keys($gd_places_ids_within_8km);
-
-     $gd_neighbourhoods = get_post_meta($geolocation_id, 'geodir_neighbourhoods', false);
-     $gd_neighbourhoods_gd_place_ids = array();
-     foreach ($gd_neighbourhoods as $gd_neighbourhood) {
-          $gd_neighbourhood_gd_place_ids = get_post_meta($gd_neighbourhood, 'gd_place_list', false);
-          $gd_neighbourhoods_gd_place_ids = array_merge($gd_neighbourhoods_gd_place_ids, $gd_neighbourhood_gd_place_ids);
-     }
-     $gd_neighbourhoods_gd_place_ids = array_unique($gd_neighbourhoods_gd_place_ids);
-
-     $gd_place_list_combined = array_merge($gd_place_list, $gd_places_ids_within_8km, $gd_neighbourhoods_gd_place_ids);
-
-     $gd_place_list_combined = array_map('intval', $gd_place_list_combined);
-
-     $gd_place_list_combined = array_unique($gd_place_list_combined);
-
-     usort($gd_place_list_combined, function ($a, $b) {
-          $partnerA = get_post_meta($a, 'partner', true);
-          $partnerB = get_post_meta($b, 'partner', true);
-          $hideA = get_post_meta($a, 'hide', true);
-          $hideB = get_post_meta($b, 'hide', true);
-
-          if ($hideA == 1 && $hideB != 1) {
-               return 1;
-          } elseif ($hideA != 1 && $hideB == 1) {
-               return -1;
-          } elseif ($partnerA == 1 && $partnerB != 1) {
-               return -1;
-          } elseif ($partnerA != 1 && $partnerB == 1) {
-               return 1;
-          } else {
-               return 0;
-          }
-     });
-     return $gd_place_list_combined;
-}
-
-function set_meta_title($geolocation_id, $num_of_gd_places, $archive_title_trimmed, $statistics_data_fields, $meta_title_candidates)
+function set_meta_title($geolocation_id, $num_of_seo_gd_places, $archive_title_trimmed, $statistics_data_fields, $meta_title_candidates)
 {
      $current_meta_title = get_post_meta($geolocation_id, 'meta_title', true);
      $lowest_price = get_post_meta($geolocation_id, 'lowest price', true);
      $lowest_price_floatval = floatval($lowest_price);
-     if ($num_of_gd_places < 3) {
+     if ($num_of_seo_gd_places < 3) {
           $new_meta_title = "Opbevaring " . $archive_title_trimmed . " – Find depotrum nær " . $archive_title_trimmed;
      } else if ($lowest_price_floatval == 0) {
           $new_meta_title = $meta_title_candidates[1];
@@ -120,7 +74,7 @@ function set_meta_title($geolocation_id, $num_of_gd_places, $archive_title_trimm
           $new_meta_title = $meta_title_candidates[0];
      }
 
-     $new_meta_title = replace_variable_placeholders($new_meta_title, $statistics_data_fields, $geolocation_id, $num_of_gd_places, $archive_title_trimmed);
+     $new_meta_title = replace_variable_placeholders($new_meta_title, $statistics_data_fields, $geolocation_id, $num_of_seo_gd_places, $archive_title_trimmed);
 
      if ($current_meta_title != $new_meta_title) {
           update_post_meta($geolocation_id, 'meta_title', $new_meta_title);
@@ -128,9 +82,9 @@ function set_meta_title($geolocation_id, $num_of_gd_places, $archive_title_trimm
      }
 }
 
-function replace_variable_placeholders($input_text, $statistics_data_fields, $geolocation_id, $num_of_gd_places, $archive_title_trimmed)
+function replace_variable_placeholders($input_text, $statistics_data_fields, $geolocation_id, $num_of_seo_gd_places, $archive_title_trimmed)
 {
-     $input_text = str_replace("[num_of_gd_places]", $num_of_gd_places, $input_text);
+     $input_text = str_replace("[num_of_seo_gd_places]", $num_of_seo_gd_places, $input_text);
 
      $input_text = str_replace("[location]", $archive_title_trimmed, $input_text);
 
@@ -164,13 +118,33 @@ function replace_statistics_data_fields_with_values($input_text, $statistics_dat
      return $input_text;
 }
 
-function generate_selfstorage_provider_list($gd_place_list_combined)
+function generate_selfstorage_provider_list($geolocation_id)
 {
+     $seo_gd_place_list = get_post_meta($geolocation_id, 'seo_gd_place_list', true);
 
-     if (!empty($gd_place_list_combined)) {
-          $return_text = '<h4>Der er i alt [num_of_gd_places] udbydere af depotrum i og omkring [location]:</h4>';
+     usort($seo_gd_place_list, function ($a, $b) {
+          $partnerA = get_post_meta($a, 'partner', true);
+          $partnerB = get_post_meta($b, 'partner', true);
+          $hideA = get_post_meta($a, 'hide', true);
+          $hideB = get_post_meta($b, 'hide', true);
+
+          if ($hideA == 1 && $hideB != 1) {
+               return 1;
+          } elseif ($hideA != 1 && $hideB == 1) {
+               return -1;
+          } elseif ($partnerA == 1 && $partnerB != 1) {
+               return -1;
+          } elseif ($partnerA != 1 && $partnerB == 1) {
+               return 1;
+          } else {
+               return 0;
+          }
+     });
+
+     if (!empty($seo_gd_place_list)) {
+          $return_text = '<h4>Der er i alt [num_of_seo_gd_places] udbydere af depotrum i og omkring [location]:</h4>';
           $return_text .= '<p class="three-columns gd_place_list"><small>';
-          foreach ($gd_place_list_combined as $gd_place) {
+          foreach ($seo_gd_place_list as $gd_place) {
                $place_name = get_the_title($gd_place);
                $place_url = get_permalink($gd_place);
                $partner = get_post_meta($gd_place, 'partner', true);
@@ -189,11 +163,10 @@ function generate_selfstorage_provider_list($gd_place_list_combined)
 }
 
 $second_paragraph = '<h2>Find opbevaring i [location]</h2>
-     <p class="three-columns">Hvis du leder efter opbevaring i [location], er du kommet til det rette sted. Her på tjekdepot har vi registreret [num_of_gd_places] udbydere af opbevaring placeret i [location], og de tilbyder alle sikre og tilgængelige depotrum. Du kan sortere alle depotrum i dit område efter pris, størrelse og egenskaber. Her kan du også finde mere information om de forskellige egenskaber ved et depotrum såsom klimakontrol, adgangsforhold og sikkerhedsforanstaltninger. Se vores opslag i [location], vælg et depotrum, der passer til dine behov, og lej den med det samme. Når du reserverer opbevaring, har du et rigtig godt sted at placere dine ting, både på lang og kort sigt. Langt de fleste opbevaringsrum udlejes på månedsbasis, hvilket betyder, at du har mulighed for at flytte ind og ud når som helst. Du kan leje opbevaring i [location] i en måned eller et helt år - uanset hvad, kan du forlænge din lejeperiode og skifte til et depotrum på en anden størrelse, når du ønsker det. På denne måde er det nemt at vælge den bedste opbevaring til dine ejendele!</p>';
+     <p class="three-columns">Hvis du leder efter opbevaring i [location], er du kommet til det rette sted. Her på tjekdepot har vi registreret [num_of_seo_gd_places] udbydere af opbevaring placeret i [location], og de tilbyder alle sikre og tilgængelige depotrum. Du kan sortere alle depotrum i dit område efter pris, størrelse og egenskaber. Her kan du også finde mere information om de forskellige egenskaber ved et depotrum såsom klimakontrol, adgangsforhold og sikkerhedsforanstaltninger. Se vores opslag i [location], vælg et depotrum, der passer til dine behov, og lej den med det samme. Når du reserverer opbevaring, har du et rigtig godt sted at placere dine ting, både på lang og kort sigt. Langt de fleste opbevaringsrum udlejes på månedsbasis, hvilket betyder, at du har mulighed for at flytte ind og ud når som helst. Du kan leje opbevaring i [location] i en måned eller et helt år - uanset hvad, kan du forlænge din lejeperiode og skifte til et depotrum på en anden størrelse, når du ønsker det. På denne måde er det nemt at vælge den bedste opbevaring til dine ejendele!</p>';
 
 function generate_price_table($geolocation_id)
 {
-
      $size_rows = array(
           'mini' => '
                <tr>
@@ -232,7 +205,7 @@ function generate_price_table($geolocation_id)
                </tr>'
      );
 
-     $price_table .= '
+     $price_table = '
                <h3>Priser på depotrum i [location]</h3>
                <table>
                <thead>
@@ -247,7 +220,6 @@ function generate_price_table($geolocation_id)
 
      $size_rows_to_include = '';
      foreach ($size_rows as $size => $size_row) {
-          // xdebug_break();
           if (check_if_price_table_fields_exist($size, $geolocation_id)) {
                $size_rows_to_include .= $size_row;
           }
@@ -268,7 +240,6 @@ function generate_price_table($geolocation_id)
 
 function check_if_price_table_fields_exist($size, $geolocation_id)
 {
-     // xdebug_break();
      $price_table_fields = array(
           $size . ' size lowest price',
           $size . ' size average price',
@@ -286,8 +257,10 @@ function check_if_price_table_fields_exist($size, $geolocation_id)
 $third_paragraph = '<h2>Hvordan finder jeg et sted at opmagasinere mine ting?</h2>
      <p class="three-columns">Hvis du leder efter et sikkert sted at opbevare mindre brugte genstande og personlige ejendele af alle typer og størrelser, er det oplagt at bruge opmagasinering, depotrum eller et opbevaringsrum tæt på dit hjem eller din virksomhed, så du har adgang til dine ting når som helst uden besvær. Her på tjekdepot får du et overblik over priser på opmagasinering og opbevaring og over rumstørrelser, egenskaber og fordele afhængigt af dine behov og dit budget. Du kan nemt finde opmagasinering i dit nabolag eller din by, uanset hvor du befinder dig i Danmark. Du er kun én søgning væk fra at finde det rigtige sted til dine ejendele i [location].</p>';
 
-function generate_schools_paragraph($schools)
+function generate_schools_paragraph($geolocation_id)
 {
+     $seo_schools = get_post_meta($geolocation_id, 'seo_schools', true);
+
      $schools_first_paragraph = '<h2>Udvid din studiebolig i [location] med et depotrum</h2>
      <p class="three-columns">Hvis du skal flytte til [location] for at studere studere på ';
      $schools_second_paragraph = 'kan du få mere plads i din studiebolig med et depotrum. Studieboliger har ofte meget begrænset plads, og du kan undgå at rod af tøj og bøger, du ikke bruger hele året, ligger og roder. Et depotrum kan også være en idé for internationale studerende, der skal have opbevaret deres ejendele imens de er hjemme på sommerferie.</p>';
@@ -310,13 +283,14 @@ function generate_schools_paragraph($schools)
      }
 }
 
-function generate_neighbourhoods_paragraph($sublocations)
+function generate_neighbourhoods_paragraph($geolocation_id)
 {
+     $neighbourhoods = get_post_meta($geolocation_id, 'geodir_neighbourhoods', false);
      $neighbourhoods_first_paragraph = '<h2>Bydele i Åarhus</h2>';
-     if (!empty($sublocations)) {
+     if (!empty($neighbourhoods)) {
           $return_text = '<p>';
           $return_text .=  $neighbourhoods_first_paragraph;
-          foreach ($sublocations as $key => $sublocation) {
+          foreach ($neighbourhoods as $key => $sublocation) {
                $title = '<strong>' . get_the_title($sublocation) . '</strong>';
                $description = str_replace('<p>', '', get_the_content(null, false, $sublocation));
                $return_text .= $title . $description;
