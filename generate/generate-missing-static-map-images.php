@@ -32,9 +32,9 @@ function generate_missing_static_map_images()
         file_put_contents($file, $image);
 
         update_post_meta($geolocation_id, 'static_map', $file_url);
-        trigger_error("Generated static map for geolocation " . $geolocation_id . " at " . $file_url, E_USER_NOTICE);
+        trigger_error("Generated missing static map for geolocation " . $geolocation_id . " at " . $file_url, E_USER_NOTICE);
     }
-    trigger_error("Generated static maps for all geolocations", E_USER_NOTICE);
+    trigger_error("Generated missing static maps for all geolocations", E_USER_NOTICE);
 }
 
 function generate_static_map_image($lat, $lng, $zoom, $width = 400, $height = 300, $apiKey)
