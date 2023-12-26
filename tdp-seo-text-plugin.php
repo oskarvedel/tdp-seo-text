@@ -79,7 +79,7 @@ function add_generate_maps_button($links)
     array_unshift($links, $consolidate_link);
     return $links;
 }
-add_filter('plugin_action_links_tdp-seo-text/tdp-seo-text.php', 'add_generate_maps_button');
+add_filter('plugin_action_links_tdp-seo-text/tdp-seo-text-plugin.php', 'add_generate_maps_button');
 
 function handle_generate_static_maps()
 {
@@ -95,7 +95,7 @@ function add_generate_seo_texts_button($links)
     array_unshift($links, $consolidate_link);
     return $links;
 }
-add_filter('plugin_action_links_tdp-seo-text/tdp-seo-text.php', 'add_generate_seo_texts_button');
+add_filter('plugin_action_links_tdp-seo-text/tdp-seo-text-plugin.php', 'add_generate_seo_texts_button');
 
 function handle_generate_seo_texts()
 {
@@ -112,7 +112,7 @@ function add_generate_meta_titles_button($links)
     return $links;
 }
 
-add_filter('plugin_action_links_tdp-seo-text/tdp-seo-text.php', 'add_generate_meta_titles_button');
+add_filter('plugin_action_links_tdp-seo-text/tdp-seo-text-plugin.php', 'add_generate_meta_titles_button');
 
 function handle_generate_meta_titles()
 {
@@ -129,7 +129,7 @@ function add_generate_nearby_locations_lists_button($links)
     return $links;
 }
 
-add_filter('plugin_action_links_tdp-seo-text/tdp-seo-text.php', 'add_generate_nearby_locations_lists_button');
+add_filter('plugin_action_links_tdp-seo-text/tdp-seo-text-plugin.php', 'add_generate_nearby_locations_lists_button');
 
 function handle_generate_nearby_locations_lists()
 {
