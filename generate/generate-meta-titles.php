@@ -11,6 +11,10 @@ function generate_missing_meta_titles()
 
           $seo_gd_place_list = get_post_meta($geolocation_id, 'seo_gd_place_list', true);
 
+          if (empty($seo_gd_place_list)) {
+               $seo_gd_place_list = array();
+          }
+
           $num_of_seo_gd_places = count($seo_gd_place_list);
 
           global $statistics_data_fields;
