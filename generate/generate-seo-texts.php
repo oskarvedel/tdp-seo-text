@@ -11,7 +11,7 @@ function generate_seo_text()
 
           $archive_title_trimmed = get_the_title($geolocation_id);
 
-          $seo_gd_place_list = get_post_meta($geolocation_id, 'seo_gd_place_list', true);
+          $seo_gd_place_list = get_post_meta($geolocation_id, 'seo_gd_place_list', false);
 
           $num_of_seo_gd_places = count($seo_gd_place_list);
 
@@ -98,7 +98,7 @@ function replace_statistics_data_fields_with_values($input_text, $statistics_dat
 
 function generate_selfstorage_provider_list($geolocation_id)
 {
-     $seo_gd_place_list = get_post_meta($geolocation_id, 'seo_gd_place_list', true);
+     $seo_gd_place_list = get_post_meta($geolocation_id, 'seo_gd_place_list', false);
 
      usort($seo_gd_place_list, function ($a, $b) {
           $partnerA = get_post_meta($a, 'partner', true);
