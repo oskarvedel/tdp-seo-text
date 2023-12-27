@@ -8,9 +8,9 @@ function generate_nearby_locations_lists()
     // if ($geolocation_id == 6345) {
     //   xdebug_break();
     // }
-    // if ($geolocation_id == 6144) {
-    //   xdebug_break();
-    // }
+    if ($geolocation_id == 6144) {
+      xdebug_break();
+    }
     $neighbourhoods = get_post_meta($geolocation_id, 'geodir_neighbourhoods', false);
     if (empty($neighbourhoods)) {
       $neighbourhoods = array();
@@ -23,7 +23,7 @@ function generate_nearby_locations_lists()
     $combined = array_merge($neighbourhoods, $geolocations_within_8_km_with_gd_places_within_8_km_sorted_by_distance);
     $combined = array_map('intval', $combined);
     $combined = array_unique($combined);
-    $combined = array_slice($combined, 0, 8);
+    $combined = array_slice($combined, 0, 10);
     $output = '<nav><div class="horizontal-list">';
     //fix this loop
     foreach ($combined as $geolocation => $nearby_geolocation_id) {
