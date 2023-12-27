@@ -8,9 +8,9 @@ function generate_nearby_locations_lists()
     // if ($geolocation_id == 6345) {
     //   xdebug_break();
     // }
-    if ($geolocation_id == 6144) {
-      xdebug_break();
-    }
+    // if ($geolocation_id == 6144) {
+    //   xdebug_break();
+    // }
     $neighbourhoods = get_post_meta($geolocation_id, 'geodir_neighbourhoods', false);
     if (empty($neighbourhoods)) {
       $neighbourhoods = array();
