@@ -9,11 +9,7 @@ function generate_missing_meta_titles()
 
           $archive_title_trimmed = get_the_title($geolocation_id);
 
-          $seo_gd_place_list = get_post_meta($geolocation_id, 'seo_gd_place_list', true);
-
-          if (empty($seo_gd_place_list)) {
-               $seo_gd_place_list = array();
-          }
+          $seo_gd_place_list = get_post_meta($geolocation_id, 'seo_gd_place_list', false);
 
           $num_of_seo_gd_places = count($seo_gd_place_list);
 
