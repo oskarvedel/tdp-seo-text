@@ -9,20 +9,15 @@ function generate_nearby_locations_lists()
     //   xdebug_break();
     // }
     $neighbourhoods = get_post_meta($geolocation_id, 'geodir_neighbourhoods', false);
-    // if (empty($neighbourhoods)) {
-    //   xdebug_break();
-    //   $neighbourhoods = array();
-    // }
+
     $first_10_geolocations_within_8_km_with_seo_gd_place_list_sorted_by_distance = get_post_meta($geolocation_id, 'first_10_geolocations_within_8_km_with_seo_gd_place_list_sorted_by_distance', false);
-    // if (empty($first_10_geolocations_within_8_km_with_seo_gd_place_list_sorted_by_distance)) {
-    //   $first_10_geolocations_within_8_km_with_seo_gd_place_list_sorted_by_distance = array();
-    // }
     $combined = array_merge($neighbourhoods, $first_10_geolocations_within_8_km_with_seo_gd_place_list_sorted_by_distance);
     $combined = array_map('intval', $combined);
     $combined = array_unique($combined);
     $parent_location = get_post_meta($geolocation_id, 'parent_location', false);
     if (!empty($parent_location)) {
-      $combined = array_diff($combined, array($parent_location));
+      $parent_location = array_map('intval', $parent_location);
+      $combined = array_diff($combined, $parent_location);
     }
     $combined = array_slice($combined, 0, 10);
     if (empty($combined)) {
