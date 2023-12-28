@@ -14,8 +14,6 @@ function generate_nearby_locations_lists()
       Error_log("geolocation_id: $geolocation_id");
       Error_log("neighbourhoods is empty");
       $neighbourhoods = array();
-    } else {
-      $neighbourhoods = array_map('intval', $neighbourhoods[0]);
     }
 
     if ($geolocation_id == 6297 || $geolocation_id == 6284) {
