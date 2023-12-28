@@ -33,7 +33,6 @@ function wp_meta_title()
 add_filter('pre_get_document_title', 'wp_meta_title', 21);
 add_filter('wp_title', 'wp_meta_title', 21);
 
-
 function seo_text_func()
 {
     $id = extract_geolocation_id_via_url_seo_text();
