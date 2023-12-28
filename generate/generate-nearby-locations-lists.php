@@ -20,7 +20,7 @@ function generate_nearby_locations_lists()
     $combined = array_merge($neighbourhoods, $first_10_geolocations_within_8_km_with_seo_gd_place_list_sorted_by_distance);
     $combined = array_map('intval', $combined);
     $combined = array_unique($combined);
-    $parent_location = get_post_meta($geolocation_id, 'parent_location', true);
+    $parent_location = get_post_meta($geolocation_id, 'parent_location', false);
     if (!empty($parent_location)) {
       $combined = array_diff($combined, array($parent_location));
     }
