@@ -44,10 +44,10 @@ function generate_nearby_locations_lists()
     $output = '<nav><div class="horizontal-list">';
 
 
-    foreach ($all_nearby_locations_lightened as $geolocation) {
-      $post_title = $geolocation[1];
-      $slug = $geolocation[2];
-      $gd_location_slug = get_post_meta($geolocation[0], 'gd_location_slug', true); //use when migrating from geodir
+    foreach ($all_nearby_locations_lightened as $nearby_geolocation) {
+      $post_title = $nearby_geolocation[1];
+      $slug = $nearby_geolocation[2];
+      $gd_location_slug = get_post_meta($nearby_geolocation[0], 'gd_location_slug', true); //use when migrating from geodir
       if (empty($gd_location_slug)) {
         $gd_location_slug = $slug;
       }
