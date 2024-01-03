@@ -4,7 +4,6 @@ function generate_nearby_locations_lists()
 {
   $geolocations = get_posts(array('post_type' => 'geolocations', 'posts_per_page' => -1));
   foreach ($geolocations as $geolocation) {
-    xdebug_break();
     $geolocation_id = $geolocation->ID;
 
     $neighbourhoods = get_post_meta($geolocation_id, 'geodir_neighbourhoods', false);
