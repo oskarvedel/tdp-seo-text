@@ -101,16 +101,16 @@ function generate_selfstorage_provider_list($geolocation_id)
      $seo_gd_place_list = get_post_meta($geolocation_id, 'seo_gd_place_list', false);
 
      usort($seo_gd_place_list, function ($a, $b) {
-          $partnerA = get_post_meta($a, 'partner', true);
-          $partnerB = get_post_meta($b, 'partner', true);
-          $hideA = get_post_meta($a, 'hide', true);
-          $hideB = get_post_meta($b, 'hide', true);
+          $partnerA = get_post_meta($a['ID'], 'partner', true);
+          $partnerB = get_post_meta($b['ID'], 'partner', true);
+          $hideA = get_post_meta($a['ID'], 'hide', true);
+          $hideB = get_post_meta($b['ID'], 'hide', true);
 
           if ($hideA == 1 && $hideB != 1) {
                return 1;
           } elseif ($hideA != 1 && $hideB == 1) {
                return -1;
-          } elseif ($partnerA == 1 && $partnerB != 1) {
+          } elseif ($partnerA == 1 && $partnerB != 1) {;
                return -1;
           } elseif ($partnerA != 1 && $partnerB == 1) {
                return 1;
@@ -123,10 +123,10 @@ function generate_selfstorage_provider_list($geolocation_id)
           $return_text = '<h4>Der er i alt [num_of_seo_gd_places] udbydere af depotrum i og omkring [location]:</h4>';
           $return_text .= '<p class="three-columns gd_place_list"><small>';
           foreach ($seo_gd_place_list as $gd_place) {
-               $place_name = get_the_title($gd_place);
-               $place_url = get_permalink($gd_place);
-               $partner = get_post_meta($gd_place, 'partner', true);
-               $hide = get_post_meta($gd_place, 'hide', true);
+               $place_name = get_the_title($gd_place['ID']);
+               $place_url = get_permalink($gd_place['ID']);
+               $partner = get_post_meta($gd_place['ID'], 'partner', true);
+               $hide = get_post_meta($gd_place['ID'], 'hide', true);
                if ($partner) {
                     $return_text .=  '<a href="' . $place_url . '" class="partner_gd_place_link">' . $place_name . '</a><br>';
                } else if ($hide) {
