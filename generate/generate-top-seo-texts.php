@@ -11,7 +11,7 @@ function generate_top_seo_texts()
           $archive_title_trimmed = get_the_title($geolocation_id);
 
           global $top_seo_text;
-          $output = "span class='top-seo-text'>";
+          $output = "<span class='top-seo-text'>";
           $output .= $top_seo_text;
 
           $output = str_replace("[location]", $archive_title_trimmed, $output);
