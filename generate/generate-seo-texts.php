@@ -1,13 +1,11 @@
 <?php
 
-function generate_seo_text()
+function generate_seo_texts()
 {
      $geolocations = get_posts(array('post_type' => 'geolocations', 'posts_per_page' => -1));
 
      foreach ($geolocations as $geolocation) {
           $geolocation_id = $geolocation->ID;
-          $geolocation_meta = get_post_meta($geolocation_id);
-          // $geolocation_meta['geolocation'] = unserialize($geolocation_meta['geolocation'][0]);
 
           $archive_title_trimmed = get_the_title($geolocation_id);
 
@@ -50,9 +48,9 @@ function generate_seo_text()
 
           //relace variable placeholders with data
           $output = replace_variable_placeholders($output, $statistics_data_fields, $geolocation_id, $num_of_seo_gd_places, $archive_title_trimmed);
-          $old_set_text = get_post_meta($geolocation_id, 'seo_text', true);
+          $old_seo_text = get_post_meta($geolocation_id, 'seo_text', true);
 
-          if ($old_set_text != $output) {
+          if ($old_seo_text != $output) {
                update_post_meta($geolocation_id, 'seo_text', $output);
                trigger_error("SEO text updated for " . $archive_title_trimmed, E_USER_NOTICE);
           }
@@ -101,10 +99,10 @@ function generate_selfstorage_provider_list($geolocation_id)
      $seo_gd_place_list = get_post_meta($geolocation_id, 'seo_gd_place_list', false);
 
      usort($seo_gd_place_list, function ($a, $b) {
-          $partnerA = get_post_meta($a['ID'], 'partner', true);
-          $partnerB = get_post_meta($b['ID'], 'partner', true);
-          $hideA = get_post_meta($a['ID'], 'hide', true);
-          $hideB = get_post_meta($b['ID'], 'hide', true);
+          $partnerA = get_post_meta($a, 'partner', true);
+          $partnerB = get_post_meta($b, 'partner', true);
+          $hideA = get_post_meta($a, 'hide', true);
+          $hideB = get_post_meta($b, 'hide', true);
 
           if ($hideA == 1 && $hideB != 1) {
                return 1;
@@ -122,11 +120,12 @@ function generate_selfstorage_provider_list($geolocation_id)
      if (!empty($seo_gd_place_list)) {
           $return_text = '<h4>Der er i alt [num_of_seo_gd_places] udbydere af depotrum i og omkring [location]:</h4>';
           $return_text .= '<p class="three-columns gd_place_list"><small>';
+          // xdebug_break();
           foreach ($seo_gd_place_list as $gd_place) {
-               $place_name = get_the_title($gd_place['ID']);
-               $place_url = get_permalink($gd_place['ID']);
-               $partner = get_post_meta($gd_place['ID'], 'partner', true);
-               $hide = get_post_meta($gd_place['ID'], 'hide', true);
+               $place_name = get_the_title($gd_place);
+               $place_url = get_permalink($gd_place);
+               $partner = get_post_meta($gd_place, 'partner', true);
+               $hide = get_post_meta($gd_place, 'hide', true);
                if ($partner) {
                     $return_text .=  '<a href="' . $place_url . '" class="partner_gd_place_link">' . $place_name . '</a><br>';
                } else if ($hide) {
