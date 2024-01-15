@@ -1,9 +1,8 @@
 <?php
 
 $meta_title_candidates = array(
-    '[num_of_seo_gd_places] udbydere af depotrum i [location] (Fra [lowest price],-)',
-    'Depotrum [location] ([num_of_seo_gd_places] udbydere) – Find opbevaring i [location]',
-    'Depotrum [location] ([num_of_seo_gd_places] udbydere) – Find opbevaring i [location]',
-    'Find opbevaring i [location] • [num_of_seo_gd_places] udbydere af depotrum',
-
+    '15 billige Depotrum i [location] • Find Opbevaring i [location]',
+    'Sammenlign Opbevaring i [location] ([num_of_seo_gd_places] udbydere) • Find Depotrum i [location]',
+    '15 billige Depotrum i [location] (Fra [lowest price],-) • Find Opbevaring i [location]',
+    '30 bedste Depotrum i [location] (Fra [lowest price],-) • Find Opbevaring i [location]',
 );
