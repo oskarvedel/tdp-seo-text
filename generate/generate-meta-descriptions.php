@@ -35,8 +35,6 @@ function set_meta_description_field($geolocation_id, $num_of_seo_gd_places, $arc
 
      $new_meta_description  = $meta_description_candidates[0]; //set basic description
 
-     xdebug_break();
-
      if ($num_of_seo_gd_places >= 3) {
           $new_meta_description = $meta_description_candidates[1];
      }
