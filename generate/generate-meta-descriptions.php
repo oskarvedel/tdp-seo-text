@@ -30,10 +30,12 @@ function set_meta_description_field($geolocation_id, $num_of_seo_gd_places, $arc
      $highest_price_floatval = floatval($highest_price);
      $average_price = get_post_meta($geolocation_id, 'average price', true);
      $average_price_floatval = floatval($average_price);
-     $num_of_units_available = get_post_meta($geolocation_id, 'num_of_units_available', true);
+     $num_of_units_available = get_post_meta($geolocation_id, 'num of units available', true);
      $num_of_units_available_intval = intval($num_of_units_available);
 
      $new_meta_description  = $meta_description_candidates[0]; //set basic description
+
+     xdebug_break();
 
      if ($num_of_seo_gd_places >= 3) {
           $new_meta_description = $meta_description_candidates[1];
