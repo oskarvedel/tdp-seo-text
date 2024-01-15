@@ -12,15 +12,18 @@ require_once dirname(__FILE__) . '/generate/generate-top-seo-texts.php';
 require_once dirname(__FILE__) . '/generate/generate-missing-static-map-images.php';
 require_once dirname(__FILE__) . '/generate/generate-nearby-locations-lists.php';
 require_once dirname(__FILE__) . '/generate/generate-meta-titles.php';
+require_once dirname(__FILE__) . '/generate/generate-meta-descriptions.php';
 
 require_once dirname(__FILE__) . '/gd_location-metadata-shortcode.php';
 
 require_once dirname(__FILE__) . '/texts/basic-text.php';
 require_once dirname(__FILE__) . '/texts/first-paragraph.php';
+require_once dirname(__FILE__) . '/texts/second-paragraph.php';
 require_once dirname(__FILE__) . '/texts/meta-title.php';
+require_once dirname(__FILE__) . '/texts/meta-description.php';
 require_once dirname(__FILE__) . '/texts/top-seo-text.php';
 
-function wp_meta_title()
+function set_meta_title()
 {
     if (geodir_is_page('post_type')) {
         $geolocation_id = extract_geolocation_id_via_url_seo_text();
@@ -32,8 +35,21 @@ function wp_meta_title()
         }
     }
 }
-add_filter('pre_get_document_title', 'wp_meta_title', 21);
-add_filter('wp_title', 'wp_meta_title', 21);
+add_filter('pre_get_document_title', 'set_meta_title', 21);
+
+function set_meta_description()
+{
+    if (geodir_is_page('post_type')) {
+        $geolocation_id = extract_geolocation_id_via_url_seo_text();
+        $meta_description = get_post_meta($geolocation_id, 'meta_description', true);
+        if (!empty($meta_description)) {
+            echo '<meta name="description" content="' . esc_attr($meta_description) . '">';
+        } else {
+            echo ''; //let rankmath handle it
+        }
+    }
+}
+add_action('wp_head', 'set_meta_description');
 
 function top_seo_text_func()
 {
@@ -61,27 +77,6 @@ function nearby_locations_list_func()
 }
 
 add_shortcode('gd_location_nearby_locations_list_shortcode', 'nearby_locations_list_func');
-
-add_action('elementor/query/gd_places_for_geolocation', function ($query) {
-    $geolocation_id = extract_geolocation_id_via_url_seo_text();
-    $gd_place_list_combined = get_post_meta($geolocation_id, 'seo_gd_place_list', false);
-
-    //remove all posts with "hide" set to 1 from gd_place_list_combined
-    $gd_place_list_combined = array_filter($gd_place_list_combined, function ($post_id) {
-        return get_post_meta($post_id, 'hide', true) != 1;
-    });
-
-    // Set the post type to 'gd_place'
-    $query->set('post_type', 'gd_place');
-
-    // Only include posts that are in $gd_place_list_combined
-    $query->set('post__in', $gd_place_list_combined);
-
-    // Order by the 'partner' meta key in descending order
-    $query->set('meta_key', 'partner');
-    $query->set('orderby', 'meta_value_num');
-    $query->set('order', 'DESC');
-});
 
 function add_generate_maps_button($links)
 {
@@ -131,21 +126,6 @@ function handle_generate_top_seo_texts()
 }
 add_action('admin_post_generate_top_seo_texts', 'handle_generate_top_seo_texts');
 
-function add_generate_meta_titles_button($links)
-{
-    $consolidate_link = '<a href="' . esc_url(admin_url('admin-post.php?action=generate_meta_titles')) . '">Generate meta titles</a>';
-    array_unshift($links, $consolidate_link);
-    return $links;
-}
-
-add_filter('plugin_action_links_tdp-seo-text/tdp-seo-text-plugin.php', 'add_generate_meta_titles_button');
-
-function handle_generate_meta_titles()
-{
-    generate_missing_meta_titles();
-    wp_redirect(admin_url('plugins.php?s=tdp&plugin_status=all'));
-    exit;
-}
 add_action('admin_post_generate_meta_titles', 'handle_generate_meta_titles');
 
 function add_generate_nearby_locations_lists_button($links)
@@ -164,3 +144,60 @@ function handle_generate_nearby_locations_lists()
     exit;
 }
 add_action('admin_post_generate_nearby_locations_lists', 'handle_generate_nearby_locations_lists');
+
+function add_generate_meta_titles_button($links)
+{
+    $consolidate_link = '<a href="' . esc_url(admin_url('admin-post.php?action=generate_meta_titles')) . '">Generate meta titles</a>';
+    array_unshift($links, $consolidate_link);
+    return $links;
+}
+
+add_filter('plugin_action_links_tdp-seo-text/tdp-seo-text-plugin.php', 'add_generate_meta_titles_button');
+
+function handle_generate_meta_titles()
+{
+    generate_meta_titles();
+    wp_redirect(admin_url('plugins.php?s=tdp&plugin_status=all'));
+    exit;
+}
+
+function add_generate_meta_descriptions_button($links)
+{
+    $consolidate_link = '<a href="' . esc_url(admin_url('admin-post.php?action=generate_meta_descriptions')) . '">Generate meta descriptions</a>';
+    array_unshift($links, $consolidate_link);
+    return $links;
+}
+
+add_filter('plugin_action_links_tdp-seo-text/tdp-seo-text-plugin.php', 'add_generate_meta_descriptions_button');
+
+function handle_generate_meta_descriptions()
+{
+    generate_meta_descriptions();
+    wp_redirect(admin_url('plugins.php?s=tdp&plugin_status=all'));
+    exit;
+}
+add_action('admin_post_generate_meta_descriptions', 'handle_generate_meta_descriptions');
+
+
+
+//******** CUSTOM GD PLACE QUERY ************
+add_action('elementor/query/gd_places_for_geolocation', function ($query) {
+    $geolocation_id = extract_geolocation_id_via_url_seo_text();
+    $gd_place_list_combined = get_post_meta($geolocation_id, 'seo_gd_place_list', false);
+
+    //remove all posts with "hide" set to 1 from gd_place_list_combined
+    $gd_place_list_combined = array_filter($gd_place_list_combined, function ($post_id) {
+        return get_post_meta($post_id, 'hide', true) != 1;
+    });
+
+    // Set the post type to 'gd_place'
+    $query->set('post_type', 'gd_place');
+
+    // Only include posts that are in $gd_place_list_combined
+    $query->set('post__in', $gd_place_list_combined);
+
+    // Order by the 'partner' meta key in descending order
+    $query->set('meta_key', 'partner');
+    $query->set('orderby', 'meta_value_num');
+    $query->set('order', 'DESC');
+});

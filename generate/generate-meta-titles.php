@@ -1,6 +1,6 @@
 <?php
 
-function generate_missing_meta_titles()
+function generate_meta_titles()
 {
      $geolocations = get_posts(array('post_type' => 'geolocations', 'posts_per_page' => -1));
 
@@ -16,12 +16,12 @@ function generate_missing_meta_titles()
           global $statistics_data_fields;
           global $meta_title_candidates;
 
-          set_meta_title($geolocation_id, $num_of_seo_gd_places, $archive_title_trimmed, $statistics_data_fields, $meta_title_candidates);
+          set_meta_title_field($geolocation_id, $num_of_seo_gd_places, $archive_title_trimmed, $statistics_data_fields, $meta_title_candidates);
      }
      trigger_error("Meta titles updated", E_USER_NOTICE);
 }
 
-function set_meta_title($geolocation_id, $num_of_seo_gd_places, $archive_title_trimmed, $statistics_data_fields, $meta_title_candidates)
+function set_meta_title_field($geolocation_id, $num_of_seo_gd_places, $archive_title_trimmed, $statistics_data_fields, $meta_title_candidates)
 {
      $current_meta_title = get_post_meta($geolocation_id, 'meta_title', true);
      $lowest_price = get_post_meta($geolocation_id, 'lowest price', true);

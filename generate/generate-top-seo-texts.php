@@ -5,7 +5,6 @@ function generate_top_seo_texts()
      $geolocations = get_posts(array('post_type' => 'geolocations', 'posts_per_page' => -1));
 
      foreach ($geolocations as $geolocation) {
-          // xdebug_break();
           $geolocation_id = $geolocation->ID;
 
           $archive_title_trimmed = get_the_title($geolocation_id);

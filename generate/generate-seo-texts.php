@@ -23,8 +23,6 @@ function generate_seo_texts()
           $output = "";
           global $statistics_data_fields_texts;
 
-          set_meta_title($geolocation_id, $num_of_seo_gd_places, $archive_title_trimmed, $statistics_data_fields, $meta_title_candidates);
-
           if ($num_of_seo_gd_places <= 2) {
                global $basic_text;
                $output = $basic_text;
@@ -99,18 +97,18 @@ function generate_selfstorage_provider_list($geolocation_id)
      $seo_gd_place_list = get_post_meta($geolocation_id, 'seo_gd_place_list', false);
 
      usort($seo_gd_place_list, function ($a, $b) {
-          $partnerA = get_post_meta($a, 'partner', true);
-          $partnerB = get_post_meta($b, 'partner', true);
-          $hideA = get_post_meta($a, 'hide', true);
-          $hideB = get_post_meta($b, 'hide', true);
+          $partnerA = get_post_meta($a['ID'], 'partner', true);
+          $partnerB = get_post_meta($b['ID'], 'partner', true);
+          $showA = get_post_meta($a['ID'], 'show_listing', true);
+          $showB = get_post_meta($b['ID'], 'show_listing', true);
 
-          if ($hideA == 1 && $hideB != 1) {
-               return 1;
-          } elseif ($hideA != 1 && $hideB == 1) {
-               return -1;
-          } elseif ($partnerA == 1 && $partnerB != 1) {;
+          if ($partnerA == 1 && $partnerB != 1) {
                return -1;
           } elseif ($partnerA != 1 && $partnerB == 1) {
+               return 1;
+          } elseif ($showA == 1 && $showB != 1) {
+               return -1;
+          } elseif ($showA != 1 && $showB == 1) {
                return 1;
           } else {
                return 0;
@@ -120,18 +118,17 @@ function generate_selfstorage_provider_list($geolocation_id)
      if (!empty($seo_gd_place_list)) {
           $return_text = '<h4>Der er i alt [num_of_seo_gd_places] udbydere af depotrum i og omkring [location]:</h4>';
           $return_text .= '<p class="three-columns gd_place_list"><small>';
-          // xdebug_break();
           foreach ($seo_gd_place_list as $gd_place) {
-               $place_name = get_the_title($gd_place);
-               $place_url = get_permalink($gd_place);
-               $partner = get_post_meta($gd_place, 'partner', true);
-               $hide = get_post_meta($gd_place, 'hide', true);
+               $place_name = $gd_place['post_title'];
+               $place_url = get_permalink($gd_place['ID']);
+               $partner = get_post_meta($gd_place['ID'], 'partner', true);
+               $show = get_post_meta($gd_place['ID'], 'show_listing', true);
                if ($partner) {
                     $return_text .=  '<a href="' . $place_url . '" class="partner_gd_place_link">' . $place_name . '</a><br>';
-               } else if ($hide) {
-                    $return_text .=  $place_name . '<br>';
-               } else {
+               } elseif ($show) {
                     $return_text .=  '<a href="' . $place_url . '" class="gd_place_link">' . $place_name . '</a><br>';
+               } else {
+                    $return_text .=  $place_name . '<br>';
                }
           }
           $return_text .= '</small></ul>';
