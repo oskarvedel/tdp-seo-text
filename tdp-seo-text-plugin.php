@@ -196,8 +196,6 @@ function modify_archive_query($query)
                 return $post['ID'];
             }, $gd_place_list_combined);
 
-            //slice the array to only include 1 post
-            $gd_place_list_combined = array_slice($gd_place_list_combined, 0, 3);
 
             // xdebug_break();
             usort($gd_place_list_combined, function ($a, $b) {
