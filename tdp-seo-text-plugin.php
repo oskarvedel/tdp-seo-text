@@ -209,3 +209,13 @@ function modify_archive_query($query)
 }
 
 add_action('pre_get_posts', 'modify_archive_query', 1);
+
+
+// Remove dashicons in frontend for unauthenticated users
+add_action('wp_enqueue_scripts', 'bs_dequeue_dashicons');
+function bs_dequeue_dashicons()
+{
+    if (!is_user_logged_in()) {
+        wp_deregister_style('dashicons');
+    }
+}
