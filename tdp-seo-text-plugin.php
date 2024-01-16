@@ -180,24 +180,44 @@ add_action('admin_post_generate_meta_descriptions', 'handle_generate_meta_descri
 
 
 
-//******** CUSTOM GD PLACE QUERY ************
-add_action('elementor/query/gd_places_for_geolocation', function ($query) {
-    $geolocation_id = extract_geolocation_id_via_url_seo_text();
-    $gd_place_list_combined = get_post_meta($geolocation_id, 'seo_gd_place_list', false);
+function modify_archive_query($query)
+{
+    // Check if we are on the front end and if the main query is being modified
+    if (!is_admin() && $query->is_main_query()) {
+        // Target a specific archive page, e.g., a custom post type archive
+        if ($query->is_post_type_archive('gd_place')) {
+            // Extract the geolocation ID from the URL
+            $geolocation_id = extract_geolocation_id_via_url_seo_text();
+            // Assume this function returns an array of post IDs
+            $gd_place_list_combined = get_post_meta($geolocation_id, 'seo_gd_place_list', false);
 
-    //remove all posts with "hide" set to 1 from gd_place_list_combined
-    $gd_place_list_combined = array_filter($gd_place_list_combined, function ($post_id) {
-        return get_post_meta($post_id, 'hide', true) != 1;
-    });
+            //get the ids from the gd_place_list_combined array
+            $gd_place_list_combined = array_map(function ($post) {
+                return $post['ID'];
+            }, $gd_place_list_combined);
 
-    // Set the post type to 'gd_place'
-    $query->set('post_type', 'gd_place');
+            //slice the array to only include 1 post
+            $gd_place_list_combined = array_slice($gd_place_list_combined, 0, 3);
 
-    // Only include posts that are in $gd_place_list_combined
-    $query->set('post__in', $gd_place_list_combined);
+            // xdebug_break();
+            usort($gd_place_list_combined, function ($a, $b) {
+                $partnerA = get_post_meta($a, 'partner', true) === '1' ? 1 : 0;
+                $partnerB = get_post_meta($b, 'partner', true) === '1' ? 1 : 0;
 
-    // Order by the 'partner' meta key in descending order
-    $query->set('meta_key', 'partner');
-    $query->set('orderby', 'meta_value_num');
-    $query->set('order', 'DESC');
-});
+                if ($partnerA == $partnerB) {
+                    return 0;
+                }
+
+                return ($partnerA > $partnerB) ? -1 : 1;
+            });
+
+            // Set the post__in parameter for the main query
+            if (!empty($gd_place_list_combined)) {
+                $query->set('post__in', array_values($gd_place_list_combined));
+                $query->set('orderby', 'post__in');
+            }
+        }
+    }
+}
+
+add_action('pre_get_posts', 'modify_archive_query', 1);
