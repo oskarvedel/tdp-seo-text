@@ -226,3 +226,10 @@ function add_font_awesome_script()
 <?php
 }
 add_action('wp_head', 'add_font_awesome_script');
+
+//dequeue 'ayecode-ui'
+function dequeue_ayecode_ui()
+{
+    wp_dequeue_style('ayecode-ui');
+}
+add_action('wp_print_styles', 'dequeue_ayecode_ui', 100);
