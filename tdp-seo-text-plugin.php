@@ -189,25 +189,12 @@ function modify_archive_query($query)
             // Extract the geolocation ID from the URL
             $geolocation_id = extract_geolocation_id_via_url_seo_text();
             // Assume this function returns an array of post IDs
-            $gd_place_list_combined = get_post_meta($geolocation_id, 'seo_gd_place_list', false);
+            $gd_place_list_combined = get_post_meta($geolocation_id, 'archive_gd_place_list', false);
 
             //get the ids from the gd_place_list_combined array
             $gd_place_list_combined = array_map(function ($post) {
                 return $post['ID'];
             }, $gd_place_list_combined);
-
-
-            // xdebug_break();
-            usort($gd_place_list_combined, function ($a, $b) {
-                $partnerA = get_post_meta($a, 'partner', true) === '1' ? 1 : 0;
-                $partnerB = get_post_meta($b, 'partner', true) === '1' ? 1 : 0;
-
-                if ($partnerA == $partnerB) {
-                    return 0;
-                }
-
-                return ($partnerA > $partnerB) ? -1 : 1;
-            });
 
             // Set the post__in parameter for the main query
             if (!empty($gd_place_list_combined)) {
