@@ -209,3 +209,20 @@ function modify_archive_query($query)
 }
 
 add_action('pre_get_posts', 'modify_archive_query', 1);
+
+
+function add_font_awesome_script()
+{
+?>
+    <script type="text/javascript">
+        (function() {
+            var css = document.createElement('link');
+            css.href = 'https://use.fontawesome.com/releases/v6.5.1/css/all.css?wpfas=true';
+            css.rel = 'stylesheet';
+            css.type = 'text/css';
+            document.getElementsByTagName('head')[0].appendChild(css);
+        })();
+    </script>
+<?php
+}
+add_action('wp_head', 'add_font_awesome_script');
