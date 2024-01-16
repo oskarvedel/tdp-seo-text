@@ -190,16 +190,19 @@ function modify_archive_query($query)
             $geolocation_id = extract_geolocation_id_via_url_seo_text();
             // Assume this function returns an array of post IDs
             $gd_place_list_combined = get_post_meta($geolocation_id, 'archive_gd_place_list', false);
-
-            //get the ids from the gd_place_list_combined array
-            $gd_place_list_combined = array_map(function ($post) {
-                return $post['ID'];
-            }, $gd_place_list_combined);
+            if (!empty($gd_place_list_combined)) {
+                //get the ids from the gd_place_list_combined array
+                $gd_place_list_combined = array_map(function ($post) {
+                    return $post['ID'];
+                }, $gd_place_list_combined);
+            }
 
             // Set the post__in parameter for the main query
             if (!empty($gd_place_list_combined)) {
                 $query->set('post__in', array_values($gd_place_list_combined));
                 $query->set('orderby', 'post__in');
+            } else {
+                $query->set('post__in', array(0));
             }
         }
     }
