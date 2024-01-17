@@ -17,6 +17,7 @@ function generate_seo_texts()
           global $statistics_data_fields;
           global $meta_title_candidates;
           global $first_paragraph_candidates;
+          global $second_paragraph_candidates;
           global $second_paragraph;
           global $price_table;
           global $third_paragraph;
@@ -36,7 +37,7 @@ function generate_seo_texts()
           $output .= '<hr class="line">';
           $output .= generate_price_table($geolocation_id);
           $output .= '<hr class="line">';
-          $output .= $second_paragraph;
+          $output .= get_seo_paragraph($archive_title_trimmed, $second_paragraph_candidates);
           $output .= '<hr class="line">';
           $output .= $third_paragraph;
           $output .= '<hr class="line">';
