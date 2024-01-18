@@ -1,8 +1,8 @@
 <?php
 
-//keyword: opbevaring / opbevaringsrum
+//keyword: opmagasinering
 
-$second_paragraph_candidates = array(
+$third_paragraph_candidates = array(
     '<h2>Leje af opbevaringsrum i [location]</h2>
     <p class="three-columns">Er du på udkig efter et opbevaringsrum i [location]? Så er du havnet på den rigtige side! Her på tjekdepot.dk har vi samlet en liste over [num_of_seo_gd_places] udbydere af depotrum og opbevaringsrum i [location]. 
     Alle tilbyder sikre og nemt tilgængelige depotrum, og du kan booke dem direkte her på platformen. 

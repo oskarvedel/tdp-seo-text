@@ -1,5 +1,6 @@
 <?php
 
+//keyword: depotrum
 
 $first_paragraph_candidates = array(
     '<h2>Lej depotrum i [location]</h2>
