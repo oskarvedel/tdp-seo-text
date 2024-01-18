@@ -188,6 +188,11 @@ function modify_archive_query($query)
         if ($query->is_post_type_archive('gd_place')) {
             // Extract the geolocation ID from the URL
             $geolocation_id = extract_geolocation_id_via_url_seo_text();
+            // $special_location = get_post_meta($current_geolocation_id, 'special_location', true);
+            if ($current_url = "lokation") {
+                $geolocation_id = 29783; //set geolocation id to Denmark
+            }
+
             // Assume this function returns an array of post IDs
             $gd_place_list_combined = get_post_meta($geolocation_id, 'archive_gd_place_list', false);
             if (!empty($gd_place_list_combined)) {
