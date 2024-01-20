@@ -31,7 +31,7 @@ function generate_chatgpt_geolocation_descriptions($num)
           $iterationPrompt = str_replace("[location]", $archive_title_trimmed, $prompt);
 
           $messages = [
-               ["role" => "user", "content" =>  $prompt],
+               ["role" => "user", "content" =>  $iterationPrompt],
           ];
 
           // The data array
