@@ -3,6 +3,7 @@
 function generate_chatgpt_geolocation_descriptions($num)
 {
      global $prompt;
+     $api_key = get_option('seo_decriptions_api_key');
      $geolocations = get_posts(array('post_type' => 'geolocations', 'posts_per_page' => -1));
 
      $counter = 0;
@@ -27,7 +28,6 @@ function generate_chatgpt_geolocation_descriptions($num)
 
           $num_of_seo_gd_places = count($seo_gd_place_list);
           // Your OpenAI API key
-          $api_key = get_option('generate_geolocation_seo_decriptions_api_key');
 
           trigger_error("found api key: $api_key", E_USER_NOTICE);
 
@@ -47,9 +47,6 @@ function generate_chatgpt_geolocation_descriptions($num)
 
           // Initialize cURL session
           $ch = curl_init();
-
-          curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
-          curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, false);
 
           // Set cURL options
           curl_setopt($ch, CURLOPT_URL, 'https://api.openai.com/v1/chat/completions'); // API URL
