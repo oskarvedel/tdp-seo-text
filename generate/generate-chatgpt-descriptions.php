@@ -85,6 +85,7 @@ function generate_chatgpt_geolocation_descriptions($num)
 
           $counter++;
      }
+     trigger_error("generated chatgpt descriptions for $counter geolocations", E_USER_NOTICE);
 }
 
 
