@@ -58,8 +58,6 @@ function generate_chatgpt_geolocation_descriptions($num)
           // Execute cURL session and get the response
           $response = curl_exec($ch);
 
-          trigger_error("response: $response", E_USER_NOTICE);
-
           if (curl_errno($ch)) {
                $curlErrorMessage = curl_error($ch);
                trigger_error('cURL Error: ' . $curlErrorMessage, E_USER_WARNING);
