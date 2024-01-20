@@ -8,7 +8,6 @@ function generate_chatgpt_geolocation_descriptions($num)
 
      $counter = 0;
 
-
      foreach ($geolocations as $geolocation) {
           if ($counter >= $num) {
                break;
@@ -27,12 +26,9 @@ function generate_chatgpt_geolocation_descriptions($num)
           $seo_gd_place_list = get_post_meta($geolocation_id, 'seo_gd_place_list', false);
 
           $num_of_seo_gd_places = count($seo_gd_place_list);
-          // Your OpenAI API key
-
-          trigger_error("found api key: $api_key", E_USER_NOTICE);
 
           // The prompt you want to send to ChatGPT
-          $prompt = str_replace("[location]", $archive_title_trimmed, $prompt);
+          $iterationPrompt = str_replace("[location]", $archive_title_trimmed, $prompt);
 
           $messages = [
                ["role" => "user", "content" =>  $prompt],
@@ -58,6 +54,7 @@ function generate_chatgpt_geolocation_descriptions($num)
                "Authorization: Bearer $api_key"
           ]);
 
+          $response = "";
           // Execute cURL session and get the response
           $response = curl_exec($ch);
 
