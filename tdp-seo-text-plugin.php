@@ -25,8 +25,6 @@ require_once dirname(__FILE__) . '/texts/meta-title.php';
 require_once dirname(__FILE__) . '/texts/meta-description.php';
 require_once dirname(__FILE__) . '/texts/top-seo-text.php';
 
-update_option('generate_geolocation_seo_decriptions_api_key', 'test');
-
 function set_meta_title()
 {
     if (geodir_is_page('post_type')) {
