@@ -14,6 +14,7 @@ require_once dirname(__FILE__) . '/generate/generate-nearby-locations-lists.php'
 require_once dirname(__FILE__) . '/generate/generate-meta-titles.php';
 require_once dirname(__FILE__) . '/generate/generate-meta-descriptions.php';
 require_once dirname(__FILE__) . '/generate/generate-chatgpt-descriptions.php';
+require_once dirname(__FILE__) . '/generate/generate-chatgpt-short-descriptions.php';
 
 require_once dirname(__FILE__) . '/gd_location-metadata-shortcode.php';
 
@@ -192,9 +193,30 @@ add_filter('plugin_action_links_tdp-seo-text/tdp-seo-text-plugin.php', 'add_gene
 
 function handle_generate_chatgpt_descriptions()
 {
-    generate_chatgpt_geolocation_descriptions(50);
+    set_time_limit(300);
+    generate_chatgpt_geolocation_descriptions(5);
     wp_redirect(admin_url('plugins.php?s=tdp&plugin_status=all'));
     exit;
 }
 
 add_action('admin_post_generate_chatgpt_descriptions', 'handle_generate_chatgpt_descriptions');
+
+function add_generate_chatgpt_short_descriptions_button($links)
+{
+    $consolidate_link = '<a href="' . esc_url(admin_url('admin-post.php?action=generate_chatgpt_short_descriptions')) . '">Generate 50 missing ChatGPT short descriptions</a>';
+    array_unshift($links, $consolidate_link);
+    return $links;
+}
+
+add_filter('plugin_action_links_tdp-seo-text/tdp-seo-text-plugin.php', 'add_generate_chatgpt_short_descriptions_button');
+
+function handle_generate_chatgpt_short_descriptions()
+{
+    update_option('seo_decriptions_api_key', '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');
+    set_time_limit(300);
+    generate_chatgpt_geolocation_short_descriptions(50);
+    wp_redirect(admin_url('plugins.php?s=tdp&plugin_status=all'));
+    exit;
+}
+
+add_action('admin_post_generate_chatgpt_short_descriptions', 'handle_generate_chatgpt_short_descriptions');

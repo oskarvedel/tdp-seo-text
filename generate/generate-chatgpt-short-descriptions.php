@@ -1,6 +1,6 @@
 <?php
 
-function generate_chatgpt_geolocation_descriptions($num)
+function generate_chatgpt_geolocation_short_descriptions($num)
 {
      global $prompt;
      $api_key = get_option('seo_decriptions_api_key');
@@ -17,7 +17,13 @@ function generate_chatgpt_geolocation_descriptions($num)
 
           $description = get_post_meta($geolocation_id, 'description', true);
 
-          if ($description) {
+          if (!$description) {
+               continue;
+          }
+
+          $short_description = get_post_meta($geolocation_id, 'short_description', true);
+
+          if ($short_description) {
                continue;
           }
 
@@ -29,6 +35,8 @@ function generate_chatgpt_geolocation_descriptions($num)
 
           // The prompt you want to send to ChatGPT
           $iterationPrompt = str_replace("[location]", $archive_title_trimmed, $prompt);
+
+          $iterationPrompt = str_replace("[description]", $description, $iterationPrompt);
 
           $messages = [
                ["role" => "user", "content" =>  $iterationPrompt],
@@ -72,26 +80,29 @@ function generate_chatgpt_geolocation_descriptions($num)
 
           $message = $responseData['choices'][0]['message']['content'];
 
-          if (strlen($message) < 150) {
-               trigger_error("generated chatgpt description was under 150 chars, stopped the script", E_USER_WARNING);
+          if (strlen($message) < 10) {
+               trigger_error("generated chatgpt short_description was under 10 chars, stopped the script", E_USER_WARNING);
+               break;
+          }
+
+          if (strlen($message) > 200) {
+               trigger_error("generated chatgpt short_description was over 200 chars, stopped the script", E_USER_WARNING);
                break;
           }
 
           if (strlen($message) > 50) {
-               update_post_meta($geolocation_id, 'description', $message);
+               update_post_meta($geolocation_id, 'short_description', $message);
           }
 
-          trigger_error("generated chatgpt description for $archive_title_trimmed: $message", E_USER_NOTICE);
+          trigger_error("generated chatgpt short_description for $archive_title_trimmed: $message", E_USER_NOTICE);
 
           $counter++;
      }
-     trigger_error("generated chatgpt descriptions for $counter geolocations", E_USER_NOTICE);
+     trigger_error("generated chatgpt short_descriptions for $counter geolocations", E_USER_NOTICE);
 }
 
-$prompt = "skriv en kort tekst/artikel om området. læg vægt på fakta om området som områdets placering i landet, områdets omdømme, nøgletal om indbyggere og erhverv, områdets udvikling.lområdets forbindelserne til nærliggende byer eller bydele. find gerne selv på flere emner. undlad emner, der ikke er tilstrækkelig information om.  Prioriter substans og undgå fuffy, fyld-indhold. 
+$prompt = "skriv en meget kort beskrivelse af lokationen. teksten skal være på 150 tegn. tag udgangspunkt i originalteksten. 
 
-brug en uhøjtidelig tone uden fyldeord og superlativer. skriv koncist og uden for mange floskler. brug en naturlig professionel, informativ skrivestil og tone. brug ikke pompøse ord. brug kun danske ord. Skriv med selvsikkerhed, brug et klart og præcist sprog, vis ekspertise, og vær gennemsigtig
+område: [location] 
 
-teksten skal være et sammenhængene afsnit på omkring 300 ord.
-
-område: [location]";
+originaltekst: [description]";
