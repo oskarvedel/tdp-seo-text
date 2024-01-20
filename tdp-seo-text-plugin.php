@@ -13,6 +13,7 @@ require_once dirname(__FILE__) . '/generate/generate-missing-static-map-images.p
 require_once dirname(__FILE__) . '/generate/generate-nearby-locations-lists.php';
 require_once dirname(__FILE__) . '/generate/generate-meta-titles.php';
 require_once dirname(__FILE__) . '/generate/generate-meta-descriptions.php';
+require_once dirname(__FILE__) . '/generate/generate-chatgpt-descriptions.php';
 
 require_once dirname(__FILE__) . '/gd_location-metadata-shortcode.php';
 
@@ -23,6 +24,8 @@ require_once dirname(__FILE__) . '/texts/second-paragraph.php';
 require_once dirname(__FILE__) . '/texts/meta-title.php';
 require_once dirname(__FILE__) . '/texts/meta-description.php';
 require_once dirname(__FILE__) . '/texts/top-seo-text.php';
+
+update_option('generate_geolocation_seo_decriptions_api_key', 'test');
 
 function set_meta_title()
 {
@@ -179,3 +182,21 @@ function handle_generate_meta_descriptions()
     exit;
 }
 add_action('admin_post_generate_meta_descriptions', 'handle_generate_meta_descriptions');
+
+function add_generate_chatgpt_descriptions_button($links)
+{
+    $consolidate_link = '<a href="' . esc_url(admin_url('admin-post.php?action=generate_chatgpt_descriptions')) . '">Generate 50 missing ChatGPT descriptions</a>';
+    array_unshift($links, $consolidate_link);
+    return $links;
+}
+
+add_filter('plugin_action_links_tdp-seo-text/tdp-seo-text-plugin.php', 'add_generate_chatgpt_descriptions_button');
+
+function handle_generate_chatgpt_descriptions()
+{
+    generate_chatgpt_geolocation_descriptions(50);
+    wp_redirect(admin_url('plugins.php?s=tdp&plugin_status=all'));
+    exit;
+}
+
+add_action('admin_post_generate_chatgpt_descriptions', 'handle_generate_chatgpt_descriptions');
