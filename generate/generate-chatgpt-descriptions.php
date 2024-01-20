@@ -1,6 +1,6 @@
 <?php
 
-function generate_chatgpt_geolocation_descriptions($num)
+function generate_missing_chatgpt_geolocation_descriptions($num)
 {
      global $prompt;
      $api_key = get_option('seo_decriptions_api_key');

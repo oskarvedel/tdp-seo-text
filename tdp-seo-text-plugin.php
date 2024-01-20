@@ -194,7 +194,7 @@ add_filter('plugin_action_links_tdp-seo-text/tdp-seo-text-plugin.php', 'add_gene
 function handle_generate_chatgpt_descriptions()
 {
     set_time_limit(300);
-    generate_chatgpt_geolocation_descriptions(5);
+    generate_missing_chatgpt_geolocation_descriptions(5);
     wp_redirect(admin_url('plugins.php?s=tdp&plugin_status=all'));
     exit;
 }
@@ -212,9 +212,8 @@ add_filter('plugin_action_links_tdp-seo-text/tdp-seo-text-plugin.php', 'add_gene
 
 function handle_generate_chatgpt_short_descriptions()
 {
-    update_option('seo_decriptions_api_key', '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');
     set_time_limit(300);
-    generate_chatgpt_geolocation_short_descriptions(50);
+    generate_missing_chatgpt_geolocation_short_descriptions(50);
     wp_redirect(admin_url('plugins.php?s=tdp&plugin_status=all'));
     exit;
 }
