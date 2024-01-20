@@ -1,6 +1,6 @@
 <?php
 
-//keyword: opmagasinering
+//keyword: lagerhotel / møbler
 
 $third_paragraph_candidates = array(
     '<h2>Leje af opbevaringsrum i [location]</h2>

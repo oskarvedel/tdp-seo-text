@@ -18,11 +18,19 @@ function generate_seo_texts()
           global $meta_title_candidates;
           global $first_paragraph_candidates;
           global $second_paragraph_candidates;
+          global $description_title_candidates;
           global $second_paragraph;
           global $price_table;
           global $third_paragraph;
           $output = "";
           global $statistics_data_fields_texts;
+
+          $description = get_post_meta($geolocation_id, 'description', true);
+
+          if ($description) {
+               $output .= get_seo_text($archive_title_trimmed, $description_title_candidates);
+               $output .= ' <p class="three-columns">' . $description . '</p>';
+          }
 
           if ($num_of_seo_gd_places <= 2) {
                global $basic_text;
@@ -33,11 +41,12 @@ function generate_seo_texts()
           }
 
           //add content to output
-          $output .= get_seo_paragraph($archive_title_trimmed, $first_paragraph_candidates);
+
+          $output .= get_seo_text($archive_title_trimmed, $first_paragraph_candidates);
           $output .= '<hr class="line">';
           $output .= generate_price_table($geolocation_id);
           $output .= '<hr class="line">';
-          $output .= get_seo_paragraph($archive_title_trimmed, $second_paragraph_candidates);
+          $output .= get_seo_text($archive_title_trimmed, $second_paragraph_candidates);
           $output .= '<hr class="line">';
           $output .= $third_paragraph;
           $output .= '<hr class="line">';
@@ -304,13 +313,10 @@ $statistics_data_fields_texts = array(
      'very large size average price' => 'Et meget stort depotrum (over 25 m²) koster i gennemsnit: <strong>[very large size average price] kr. </strong>',
 );
 
-function get_seo_paragraph($location_title, $paragraph_array)
+function get_seo_text($location_title, $paragraph_array)
 {
      $num_of_options = count($paragraph_array);
-     //echo "num of options: ", $num_of_options;
      $chosen_option = seeded_rand(1, $num_of_options, $location_title);
-     //echo $chosen_option;
-     //return $paragraph_array[2];
      return $paragraph_array[$chosen_option - 1];
 }
 

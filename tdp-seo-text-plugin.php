@@ -16,6 +16,7 @@ require_once dirname(__FILE__) . '/generate/generate-meta-descriptions.php';
 
 require_once dirname(__FILE__) . '/gd_location-metadata-shortcode.php';
 
+require_once dirname(__FILE__) . '/texts/description-title.php';
 require_once dirname(__FILE__) . '/texts/basic-text.php';
 require_once dirname(__FILE__) . '/texts/first-paragraph.php';
 require_once dirname(__FILE__) . '/texts/second-paragraph.php';
@@ -59,6 +60,7 @@ function top_seo_text_func()
 }
 
 add_shortcode('gd_location_top_seo_text_shortcode', 'top_seo_text_func');
+
 
 function seo_text_func()
 {
