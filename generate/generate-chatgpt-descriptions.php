@@ -28,7 +28,6 @@ function generate_chatgpt_geolocation_descriptions($num)
           // Your OpenAI API key
           $api_key = get_option('generate_geolocation_seo_decriptions_api_key');
 
-          xdebug_break();
           // The prompt you want to send to ChatGPT
           $prompt = str_replace("[location]", $archive_title_trimmed, $prompt);
 
