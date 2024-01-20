@@ -7,6 +7,7 @@ function generate_chatgpt_geolocation_descriptions($num)
 
      $counter = 0;
 
+
      foreach ($geolocations as $geolocation) {
           if ($counter >= $num) {
                break;
@@ -28,6 +29,8 @@ function generate_chatgpt_geolocation_descriptions($num)
           // Your OpenAI API key
           $api_key = get_option('generate_geolocation_seo_decriptions_api_key');
 
+          trigger_error("found api key: $api_key", E_USER_NOTICE);
+
           // The prompt you want to send to ChatGPT
           $prompt = str_replace("[location]", $archive_title_trimmed, $prompt);
 
@@ -41,6 +44,9 @@ function generate_chatgpt_geolocation_descriptions($num)
                'messages' => $messages, // your prompt
 
           ];
+
+          curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
+          curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, false);
 
           // Initialize cURL session
           $ch = curl_init();
@@ -58,9 +64,11 @@ function generate_chatgpt_geolocation_descriptions($num)
           // Execute cURL session and get the response
           $response = curl_exec($ch);
 
-          // Check for cURL errors
+          trigger_error("response: $response", E_USER_NOTICE);
+
           if (curl_errno($ch)) {
-               echo 'Error:' . curl_error($ch);
+               $curlErrorMessage = curl_error($ch);
+               trigger_error('cURL Error: ' . $curlErrorMessage, E_USER_WARNING);
                break;
           }
 
@@ -73,7 +81,7 @@ function generate_chatgpt_geolocation_descriptions($num)
           $message = $responseData['choices'][0]['message']['content'];
 
           if (strlen($message) < 150) {
-               trigger_error("generated chatgpt description was under 1450 chars, stopped the script", E_USER_WARNING);
+               trigger_error("generated chatgpt description was under 150 chars, stopped the script", E_USER_WARNING);
                break;
           }
 
@@ -85,9 +93,6 @@ function generate_chatgpt_geolocation_descriptions($num)
 
           $counter++;
      }
-
-
-     trigger_error("SEO texts updated", E_USER_NOTICE);
 }
 
 
