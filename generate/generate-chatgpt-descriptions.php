@@ -45,11 +45,11 @@ function generate_chatgpt_geolocation_descriptions($num)
 
           ];
 
-          curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
-          curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, false);
-
           // Initialize cURL session
           $ch = curl_init();
+
+          curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
+          curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, false);
 
           // Set cURL options
           curl_setopt($ch, CURLOPT_URL, 'https://api.openai.com/v1/chat/completions'); // API URL
