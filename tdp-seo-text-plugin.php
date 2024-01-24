@@ -45,8 +45,6 @@ function set_meta_description()
         $meta_description = get_post_meta($geolocation_id, 'meta_description', true);
         if (!empty($meta_description)) {
             echo '<meta name="description" content="' . esc_attr($meta_description) . '">';
-        } else {
-            echo ' ✓ Alle opbevaringsrum i Danmark ✓ Sammenlign priser ➡ Find den bedste løsning.'; //let rankmath handle it
         }
     }
 }
