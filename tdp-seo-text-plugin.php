@@ -26,7 +26,7 @@ require_once dirname(__FILE__) . '/texts/meta-title.php';
 require_once dirname(__FILE__) . '/texts/meta-description.php';
 require_once dirname(__FILE__) . '/texts/top-seo-text.php';
 
-function set_meta_title()
+function set_lokation_archive_meta_titles()
 {
     if (geodir_is_page('post_type')) {
         $geolocation_id = extract_geolocation_id_via_url_seo_text();
@@ -38,9 +38,9 @@ function set_meta_title()
         }
     }
 }
-add_filter('pre_get_document_title', 'set_meta_title', 21);
+add_filter('pre_get_document_title', 'set_lokation_archive_meta_titles', 21);
 
-function set_meta_description()
+function set_lokation_archive_meta_descriptions()
 {
     if (geodir_is_page('post_type')) {
         $geolocation_id = extract_geolocation_id_via_url_seo_text();
@@ -52,7 +52,7 @@ function set_meta_description()
         }
     }
 }
-add_action('wp_head', 'set_meta_description');
+add_action('wp_head', 'set_lokation_archive_meta_descriptions');
 
 function top_seo_text_func()
 {
