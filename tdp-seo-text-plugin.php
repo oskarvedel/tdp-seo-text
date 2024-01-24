@@ -33,8 +33,6 @@ function set_meta_title()
         $meta_title = get_post_meta($geolocation_id, 'meta_title', true);
         if (!empty($meta_title)) {
             return $meta_title;
-        } else {
-            return "Find opbevaring og depotrum";
         }
     }
 }
@@ -48,7 +46,7 @@ function set_meta_description()
         if (!empty($meta_description)) {
             echo '<meta name="description" content="' . esc_attr($meta_description) . '">';
         } else {
-            echo ''; //let rankmath handle it
+            echo ' ✓ Alle opbevaringsrum i Danmark ✓ Sammenlign priser ➡ Find den bedste løsning.'; //let rankmath handle it
         }
     }
 }
