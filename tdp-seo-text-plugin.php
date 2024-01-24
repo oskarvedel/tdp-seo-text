@@ -33,8 +33,6 @@ function set_meta_title()
         $meta_title = get_post_meta($geolocation_id, 'meta_title', true);
         if (!empty($meta_title)) {
             return $meta_title;
-        } else {
-            return get_the_title($geolocation_id); //let rankmath handle it
         }
     }
 }
@@ -47,8 +45,6 @@ function set_meta_description()
         $meta_description = get_post_meta($geolocation_id, 'meta_description', true);
         if (!empty($meta_description)) {
             echo '<meta name="description" content="' . esc_attr($meta_description) . '">';
-        } else {
-            echo '<meta name="description" content="' . esc_attr(get_post_field('post_excerpt', $geolocation_id)) . '">'; // let rankmath handle it
         }
     }
 }
