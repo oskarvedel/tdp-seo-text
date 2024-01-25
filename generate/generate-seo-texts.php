@@ -29,7 +29,7 @@ function generate_seo_texts()
 
           if ($description) {
                $output .= get_seo_text($archive_title_trimmed, $description_title_candidates);
-               $output .= ' <p class="three-columns">' . $description . '</p>';
+               $output .= ' <p class="three-columns">[map img]' . $description . '</p>';
           }
 
           if ($num_of_seo_gd_places <= 2) {
@@ -41,7 +41,6 @@ function generate_seo_texts()
           }
 
           //add content to output
-
           $output .= get_seo_text($archive_title_trimmed, $first_paragraph_candidates);
           $output .= '<hr class="line">';
           $output .= generate_price_table($geolocation_id);

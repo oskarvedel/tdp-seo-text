@@ -2,7 +2,6 @@
 
 function generate_missing_chatgpt_geolocation_short_descriptions($num)
 {
-     xdebug_break();
      global $short_description_prompt;
      $api_key = get_option('seo_decriptions_api_key');
      $geolocations = get_posts(array('post_type' => 'geolocations', 'posts_per_page' => -1));
