@@ -2,7 +2,8 @@
 
 function generate_missing_chatgpt_geolocation_descriptions($num)
 {
-     global $prompt;
+     //set option
+     global $description_prompt;
      $api_key = get_option('seo_decriptions_api_key');
      $geolocations = get_posts(array('post_type' => 'geolocations', 'posts_per_page' => -1));
 
@@ -28,7 +29,7 @@ function generate_missing_chatgpt_geolocation_descriptions($num)
           $num_of_seo_gd_places = count($seo_gd_place_list);
 
           // The prompt you want to send to ChatGPT
-          $iterationPrompt = str_replace("[location]", $archive_title_trimmed, $prompt);
+          $iterationPrompt = str_replace("[location]", $archive_title_trimmed, $description_prompt);
 
           $messages = [
                ["role" => "user", "content" =>  $iterationPrompt],
@@ -88,7 +89,7 @@ function generate_missing_chatgpt_geolocation_descriptions($num)
      trigger_error("generated chatgpt descriptions for $counter geolocations", E_USER_NOTICE);
 }
 
-$prompt = "skriv en kort tekst/artikel om området. læg vægt på fakta om området som områdets placering i landet, områdets omdømme, nøgletal om indbyggere og erhverv, områdets udvikling.lområdets forbindelserne til nærliggende byer eller bydele. find gerne selv på flere emner. undlad emner, der ikke er tilstrækkelig information om.  Prioriter substans og undgå fuffy, fyld-indhold. 
+$description_prompt = "skriv en kort tekst/artikel om området. læg vægt på fakta om området som områdets placering i landet, områdets omdømme, nøgletal om indbyggere og erhverv, områdets udvikling.lområdets forbindelserne til nærliggende byer eller bydele. find gerne selv på flere emner. undlad emner, der ikke er tilstrækkelig information om.  Prioriter substans og undgå fuffy, fyld-indhold. 
 
 brug en uhøjtidelig tone uden fyldeord og superlativer. skriv koncist og uden for mange floskler. brug en naturlig professionel, informativ skrivestil og tone. brug ikke pompøse ord. brug kun danske ord. Skriv med selvsikkerhed, brug et klart og præcist sprog, vis ekspertise, og vær gennemsigtig
 

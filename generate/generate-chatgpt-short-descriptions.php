@@ -2,7 +2,8 @@
 
 function generate_missing_chatgpt_geolocation_short_descriptions($num)
 {
-     global $prompt;
+     xdebug_break();
+     global $short_description_prompt;
      $api_key = get_option('seo_decriptions_api_key');
      $geolocations = get_posts(array('post_type' => 'geolocations', 'posts_per_page' => -1));
 
@@ -34,7 +35,7 @@ function generate_missing_chatgpt_geolocation_short_descriptions($num)
           $num_of_seo_gd_places = count($seo_gd_place_list);
 
           // The prompt you want to send to ChatGPT
-          $iterationPrompt = str_replace("[location]", $archive_title_trimmed, $prompt);
+          $iterationPrompt = str_replace("[location]", $archive_title_trimmed, $short_description_prompt);
 
           $iterationPrompt = str_replace("[description]", $description, $iterationPrompt);
 
@@ -101,7 +102,7 @@ function generate_missing_chatgpt_geolocation_short_descriptions($num)
      trigger_error("generated chatgpt short_descriptions for $counter geolocations", E_USER_NOTICE);
 }
 
-$prompt = "skriv en meget kort beskrivelse af lokationen. teksten skal være på 150 tegn. tag udgangspunkt i originalteksten. 
+$short_description_prompt = "skriv en meget kort beskrivelse af lokationen. teksten skal være på 150 tegn. tag udgangspunkt i originalteksten. 
 
 område: [location] 
 
