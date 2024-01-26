@@ -65,9 +65,11 @@ function generate_seo_texts()
      trigger_error("SEO texts updated", E_USER_NOTICE);
 }
 
-function replace_variable_placeholders($input_text, $statistics_data_fields, $geolocation_id, $num_of_seo_gd_places, $archive_title_trimmed)
+function replace_variable_placeholders($input_text, $statistics_data_fields, $geolocation_id, $num_of_seo_gd_places, $seo_num_of_units_available, $archive_title_trimmed)
 {
      $input_text = str_replace("[num_of_seo_gd_places]", $num_of_seo_gd_places, $input_text);
+
+     $input_text = str_replace("[seo_num_of_units_available]", $seo_num_of_units_available, $input_text);
 
      $input_text = str_replace("[location]", $archive_title_trimmed, $input_text);
 

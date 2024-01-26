@@ -193,7 +193,7 @@ add_filter('plugin_action_links_tdp-seo-text/tdp-seo-text-plugin.php', 'add_gene
 
 function handle_generate_chatgpt_descriptions()
 {
-    set_time_limit(300);
+    set_time_limit(3000);
     generate_missing_chatgpt_geolocation_descriptions(50);
     wp_redirect(admin_url('plugins.php?s=tdp&plugin_status=all'));
     exit;
@@ -212,7 +212,7 @@ add_filter('plugin_action_links_tdp-seo-text/tdp-seo-text-plugin.php', 'add_gene
 
 function handle_generate_chatgpt_short_descriptions()
 {
-    set_time_limit(300);
+    set_time_limit(3000);
     generate_missing_chatgpt_geolocation_short_descriptions(50);
     wp_redirect(admin_url('plugins.php?s=tdp&plugin_status=all'));
     exit;
