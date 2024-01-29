@@ -24,25 +24,30 @@ function generate_seo_texts()
           global $second_paragraph;
           global $price_table;
           global $third_paragraph;
-          $output = "";
+          $output = '<div class="seo-text">';
           global $statistics_data_fields_texts;
 
           $description = get_post_meta($geolocation_id, 'description', true);
 
+          //add content to output
           if ($description) {
                $output .= get_seo_text($archive_title_trimmed, $description_title_candidates);
-               $output .= ' <p class="three-columns">[map img]' . $description . '</p>';
+               $output .= ' <p class="three-columns">[map img]<br>' . $description . '</p>';
           }
 
+
+          //if no gd places, use basic text
           if ($num_of_seo_gd_places <= 2) {
                global $basic_text;
                $output = $basic_text;
                $output = str_replace("[location]", $archive_title_trimmed, $output);
                update_post_meta($geolocation_id, 'seo_text', $output);
+               $output .= '</div>'; //add closing div for seo-text class div
                continue;
           }
 
-          //add content to output
+          //if succifient gd places, use non-basic text
+          $output .= '<hr class="line">';
           $output .= get_seo_text($archive_title_trimmed, $first_paragraph_candidates);
           $output .= '<hr class="line">';
           $output .= generate_price_table($geolocation_id);
@@ -58,6 +63,8 @@ function generate_seo_texts()
           //relace variable placeholders with data
           $output = replace_variable_placeholders($output, $statistics_data_fields, $geolocation_id, $num_of_seo_gd_places, $seo_num_of_units_available, $archive_title_trimmed);
           $old_seo_text = get_post_meta($geolocation_id, 'seo_text', true);
+
+          $output .= '</div>'; //add closing div for seo-text class div
 
           if ($old_seo_text != $output) {
                update_post_meta($geolocation_id, 'seo_text', $output);
@@ -87,7 +94,7 @@ function replace_image_variables($input_text, $geolocation_id, $archive_title_tr
 {
      //insert static map
      $static_map = get_post_meta($geolocation_id, 'static_map', true);
-     $input_text = str_replace("[map img]", '<img src="' . $static_map . '" alt="Kort over ' . $archive_title_trimmed . '">', $input_text);
+     $input_text = str_replace("[map img]", '<img src="' . $static_map . '" alt="Kort over ' . $archive_title_trimmed . '" class="map-img">', $input_text);
      return $input_text;
 }
 function replace_statistics_data_fields_with_values($input_text, $statistics_data_fields, $geolocation_id)
