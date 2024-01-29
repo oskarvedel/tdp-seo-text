@@ -13,6 +13,8 @@ function generate_seo_texts()
 
           $num_of_seo_gd_places = count($seo_gd_place_list);
 
+          $seo_num_of_units_available = get_post_meta($geolocation_id, 'seo_num_of_units_available', true);
+
           //set variables
           global $statistics_data_fields;
           global $meta_title_candidates;
@@ -54,7 +56,7 @@ function generate_seo_texts()
           $output .= generate_selfstorage_provider_list($geolocation_id);
 
           //relace variable placeholders with data
-          $output = replace_variable_placeholders($output, $statistics_data_fields, $geolocation_id, $num_of_seo_gd_places, $archive_title_trimmed);
+          $output = replace_variable_placeholders($output, $statistics_data_fields, $geolocation_id, $num_of_seo_gd_places, $seo_num_of_units_available, $archive_title_trimmed);
           $old_seo_text = get_post_meta($geolocation_id, 'seo_text', true);
 
           if ($old_seo_text != $output) {
