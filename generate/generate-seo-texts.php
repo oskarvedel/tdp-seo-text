@@ -164,35 +164,35 @@ function generate_price_table($geolocation_id)
      $size_rows = array(
           'mini' => '
                <tr>
-               <td>Mini (fra 0 til 2 m²)</td>
+               <td class="seo-table-mini">Mini (fra 0 til 2 m²)</td>
                <td class="right-align">[mini size lowest price]</td>
                <td class="right-align">[mini size average price]</td>
                <td class="right-align">[mini size highest price]</td>
                </tr>',
           'small' => '
                <tr>
-               <td>Lille (2 til 7 m²)</td>
+               <td class="seo-table-small">Lille (2 til 7 m²)</td>
                <td class="right-align">[small size lowest price]</td>
                <td class="right-align">[small size average price]</td>
                <td class="right-align">[small size highest price]</td>
                </tr>',
           'medium' => '
                <tr>
-               <td>Mellem (7 til 18 m²)</td>
+               <td class="seo-table-medium">Mellem (7 til 18 m²)</td>
                <td class="right-align">[medium size lowest price]</td>
                <td class="right-align">[medium size average price]</td>
                <td class="right-align">[medium size highest price]</td>
                </tr>',
           'large' => '
                <tr>
-               <td>Stort (18 til 25 m²)</td>
+               <td class="seo-table-large">Stort (18 til 25 m²)</td>
                <td class="right-align">[large size lowest price]</td>
                <td class="right-align">[large size average price]</td>
                <td class="right-align">[large size highest price]</td>
                </tr>',
           'very_large' => '
                <tr>
-               <td>Meget stort (over 25 m²)</td>
+               <td class="seo-table-very-large">Meget stort (over 25 m²)</td>
                <td class="right-align">[very large size lowest price]</td>
                <td class="right-align">[very large size average price]</td>
                <td class="right-align">[very large size highest price]</td>
@@ -204,10 +204,10 @@ function generate_price_table($geolocation_id)
                <table>
                <thead>
                <tr>
-               <th class="left-align"><strong>Størrelse</strong></th>
-               <th class="right-align"><strong>Laveste pris</strong></th>
-               <th class="right-align"><strong>Gennemsnitpris</strong></th>
-               <th class="right-align"><strong>Højeste pris</strong></th>
+               <th class="left-align seo-table-size"><strong>Størrelse</strong></th>
+               <th class="right-align seo-table-lowest-price"><strong>Laveste pris</strong></th>
+               <th class="right-align seo-table-average-price"><strong>Gennemsnitspris</strong></th>
+               <th class="right-align seo-table-highest-price"><strong>Højeste pris</strong></th>
                </tr>
                </thead>
                <tbody>';
