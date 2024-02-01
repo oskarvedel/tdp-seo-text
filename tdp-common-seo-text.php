@@ -74,6 +74,8 @@ function extract_geolocation_slug_via_url_seo_text()
 }
 
 /**
+
+/**
  * Extracts the geolocation ID from the current URL.
  *
  * This function first calls the extract_geolocation_slug_via_url function to get
@@ -89,20 +91,30 @@ function extract_geolocation_id_via_url_seo_text()
     // Get the geolocation slug from the URL
     $slug = extract_geolocation_slug_via_url_seo_text();
 
-    // Use the Pods plugin to get the geolocation object associated with the slug
-    $slug_test = pods('geolocations', $slug);
+    // // Use the Pods plugin to get the geolocation object associated with the slug
+    // $slug_test = pods('geolocations', $slug);
+
+    // Use the get_page_by_path function to get the geolocation object associated with the slug
+    $geolocation_object = get_page_by_path($slug, OBJECT, 'geolocations');
+
 
     // Initialize the geolocation ID as null
     $geolocation_id = null;
 
     // If the geolocation object exists, extract its ID
-    if ($slug_test && $slug_test->exists()) {
-        $geolocation_id = $slug_test->field('ID');
+    if ($geolocation_object) {
+        $geolocation_id = $geolocation_object->ID;
     }
+
+    // // If the geolocation object exists, extract its ID
+    // if ($slug_test && $slug_test->exists()) {
+    //     $geolocation_id = $slug_test->field('ID');
+    // }
 
     // Return the geolocation ID
     return $geolocation_id;
 }
+
 
 function get_statistics_data_for_single_gd_place_seo_text($gd_place_id)
 {
