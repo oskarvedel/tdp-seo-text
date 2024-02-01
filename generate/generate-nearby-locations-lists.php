@@ -14,26 +14,22 @@ function generate_nearby_locations_lists()
     $first_10_geolocations_within_8_km_with_seo_gd_place_list_sorted_by_distance = get_post_meta($geolocation_id, 'first_10_geolocations_within_8_km_with_seo_gd_place_list_sorted_by_distance', false);
 
     $all_nearby_locations = array_merge($neighbourhoods, $first_10_geolocations_within_8_km_with_seo_gd_place_list_sorted_by_distance);
-
     $all_nearby_locations_lightened = array();
     foreach ($all_nearby_locations as $heavy_nearby_location) {
-      $light_nearby_location = array($heavy_nearby_location['ID'], $heavy_nearby_location['post_title'], $heavy_nearby_location['post_name']); // replace 0, 1, 2 with the indexes of the values you want
+      $light_nearby_location = array($heavy_nearby_location, get_the_title($heavy_nearby_location), get_post_field('post_name', $heavy_nearby_location)); // replace 0, 1, 2 with the indexes of the values you want
       $all_nearby_locations_lightened[] = $light_nearby_location;
     }
 
     //remove duplicates
     $all_nearby_locations_lightened = array_map('unserialize', array_unique(array_map('serialize', $all_nearby_locations_lightened)));
 
-    $parent_location = get_post_meta($geolocation_id, 'parent_location', true);
-    if (!empty($parent_location)) {
-      $parent_location_id = $parent_location['ID'];
+    $parent_location_id = get_post_meta($geolocation_id, 'parent_location', true);
+    if (!empty($parent_location_id)) {
       foreach ($all_nearby_locations_lightened as $key => $nearby_location) {
         if ($nearby_location[0] == $parent_location_id) {
           unset($all_nearby_locations_lightened[$key]);
         }
       }
-      // $all_nearby_locations_lightened = array_diff($all_nearby_locations_lightened, $parent_location);
-
     }
     $all_nearby_locations_lightened = array_slice($all_nearby_locations_lightened, 0, 10);
 
