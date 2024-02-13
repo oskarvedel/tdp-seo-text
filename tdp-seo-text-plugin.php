@@ -63,7 +63,6 @@ function top_seo_text_func()
 
 add_shortcode('gd_location_top_seo_text_shortcode', 'top_seo_text_func');
 
-
 function seo_text_func()
 {
     $id = extract_geolocation_id_via_url_seo_text();
