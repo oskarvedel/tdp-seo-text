@@ -2,7 +2,6 @@
 
 function generate_nearby_locations_lists()
 {
-  xdebug_break();
   $geolocations = get_posts(array('post_type' => 'geolocations', 'posts_per_page' => -1));
   foreach ($geolocations as $geolocation) {
     $geolocation_id = $geolocation->ID;
