@@ -53,7 +53,7 @@ function generate_nearby_locations_lists()
       update_post_meta($geolocation_id, 'nearby_locations_list', "");
       continue;
     }
-    $output = '<nav><div class="horizontal-list">';
+    $output = '<nav><div class="scrollable-list"><div>';
 
 
     foreach ($all_nearby_locations_bulky as $nearby_geolocation) {
@@ -67,7 +67,7 @@ function generate_nearby_locations_lists()
       $output .= '<a href="' . $link . '">' . $post_title . '</a>';
     }
 
-    $output .= '</div></nav>';
+    $output .= '</div></div></nav>';
 
     $current_nearby_locations_list = get_post_meta($geolocation_id, 'nearby_locations_list', true);
 
